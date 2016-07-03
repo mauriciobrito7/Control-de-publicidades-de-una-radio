@@ -3,7 +3,7 @@ Desarrollo de un sistema de control de publicidades de una radio y usuarios que 
 
 Gestión de publicidad para una radio
 
-Requerimientos
+# Requerimientos
 
 1. Control de usuario (locutores, secretaria, dueño).
 
@@ -15,8 +15,32 @@ Requerimientos
 
 5. Permitir buscar, listar las publicidades por hora, por locutor, por programas.
 
-6. Restricciones
+# Restricciones
 
 1. Un locutor puede tener varios programas de radio.
 
 2. Un cliente puede pagar varias cuñas y estar en varios programas de la radio.
+
+# Control of radio advertising
+
+Development of a control system and a radio advertisements that make users (Owner, Announcers, Secretaries) developed in C.
+
+Advertising management for a radio
+
+# Requirements
+
+1.User Control (broadcasters, secretary, owner).
+
+2.Customer Management (companies that pay advertising)
+
+3.Management plans and advertising payments.
+
+4.Record, modify, remove radio spots. (Join for a specified time).
+
+5.Allow find, list advertisements per hour, announcer, program.
+
+# Restrictions
+
+1.A speaker may have several radio programs.
+
+2.A customer can pay several wedges and be in several radio programs.
