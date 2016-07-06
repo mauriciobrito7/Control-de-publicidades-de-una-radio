@@ -247,6 +247,7 @@ void registroLocutor(Radio estacion_de_radio)
 void eliminarLocutor(Radio estacion_de_radio)
 {
     int cedula;
+    system("cls");
     Locutor *cabezaAuxiliar, *nodoAnterior;
     //SE SOLICITA LA CEDULA DEL LOCUTOR A ELIMINAR
     printf("Introduzca la cedula del locutor a eliminar \n");
