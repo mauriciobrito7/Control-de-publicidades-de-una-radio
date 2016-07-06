@@ -30,7 +30,7 @@ typedef struct locutor{
 typedef struct secretaria{
     Persona persona_secretaria;
     Empleado empleado_secretaria;
-    char *password;
+    //char *password;
     struct secretaria *sig;
     //Agregar_registro_de_locutor;
     //Agregar_registro_de_cliente;

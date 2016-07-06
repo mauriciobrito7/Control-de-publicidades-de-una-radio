@@ -1,248 +1,6 @@
 //AQUI ESTARAN LAS FUNCIONES DE LA LIBRERIA
 #include "Radio.h"
 
-
-void diseno(){
-    int i;
-
-    //R
-    textcolor(WHITE);
-    for(i=3;i<10;i++){
-        gotoxy(30,i);
-        printf("%c",178);
-
-    }
-
-    for(i=30;i<40;i++){
-        gotoxy(i,3);
-        printf("%c",178);
-    }
-
-    for(i=3;i<7;i++){
-        gotoxy(40,i);
-        printf("%c",178);
-    }
-    for(i=3;i<6;i++){
-        gotoxy(40,i);
-        printf("%c",178);
-    }
-    for(i=30;i<40;i++){
-        gotoxy(i,6);
-        printf("%c",178);
-    }
-    int j=39;
-    for(i=7;i<10;i++){
-        gotoxy(j++,i);
-        printf("%c",178);
-    }
-
-    //A
-    for(i=3;i<10;i++){
-        gotoxy(44,i);
-        printf("%c",178);
-
-    }
-    for(i=44;i<54;i++){
-        gotoxy(i,3);
-        printf("%c",178);
-    }
-    for(i=3;i<10;i++){
-        gotoxy(54,i);
-        printf("%c",178);
-    }
-    for(i=45;i<53;i++){
-        gotoxy(i,6);
-        printf("%c",178);
-    }
-
-    //D
-    for(i=3;i<10;i++){
-        gotoxy(58,i);
-        printf("%c",178);
-    }
-
-    for(i=58;i<66;i++){
-        gotoxy(i,3);
-        printf("%c",178);
-    }
-     for(i=58;i<66;i++){
-        gotoxy(i,9);
-        printf("%c",178);
-    }
-     j=66;
-    for(i=4;i<6;i++){
-        gotoxy(j++,i);
-        printf("%c",178);
-    }
-
-    for(i=6;i<8;i++){
-        gotoxy(67,i);
-        printf("%c",178);
-    }
-        gotoxy(66,8);
-        printf("%c",178);
-
-    //I
-      for(i=3;i<10;i++){
-        gotoxy(72,i);
-        printf("%c",178);
-    }
-
-    //O
-     for(i=3;i<10;i++){
-        gotoxy(76,i);
-        printf("%c",178);
-    }
-    for(i=77;i<88;i++){
-        gotoxy(i,3);
-        printf("%c",178);
-    }
-     for(i=3;i<10;i++){
-        gotoxy(88,i);
-        printf("%c",178);
-    }
-    for(i=77;i<88;i++){
-        gotoxy(i,9);
-        printf("%c",178);
-    }
-
-    //U
-    textcolor(LIGHTBLUE);
-    for(i=12;i<19;i++){
-        gotoxy(30,i);
-        printf("%c",178);
-    }
-    for(i=30;i<40;i++){
-        gotoxy(i,18);
-        printf("%c",178);
-    }
-    for(i=12;i<19;i++){
-        gotoxy(40,i);
-        printf("%c",178);
-    }
-    //N
-    for(i=12;i<19;i++){
-        gotoxy(46,i);
-        printf("%c",178);
-    }
-    j=47;
-    for(i=12;i<19;i++){
-        gotoxy(j++,i);
-        printf("%c",178);
-    }
-
-    for(i=12;i<19;i++){
-        gotoxy(54,i);
-        printf("%c",178);
-    }
-    //E
-    for(i=12;i<19;i++){
-        gotoxy(60,i);
-        printf("%c",178);
-    }
-    for(i=60;i<70;i++){
-        gotoxy(i,12);
-        printf("%c",178);
-    }
-    for(i=60;i<67;i++){
-        gotoxy(i,15);
-        printf("%c",178);
-    }
-    for(i=60;i<70;i++){
-        gotoxy(i,18);
-        printf("%c",178);
-    }
-
-    //G
-    for(i=12;i<19;i++){
-        gotoxy(76,i);
-        printf("%c",178);
-    }
-
-    for(i=76;i<87;i++){
-        gotoxy(i,12);
-        printf("%c",178);
-    }
-
-    for(i=76;i<89;i++){
-        gotoxy(i,18);
-        printf("%c",178);
-    }
-    for(i=18;i>15;i--){
-        gotoxy(88,i);
-        printf("%c",178);
-    }
-
-    for(i=84;i<89;i++){
-        gotoxy(i,15);
-        printf("%c",178);
-    }
-
-    //Marco
-    textcolor(LIGHTGRAY);
-    //Esquinas
-    gotoxy(1,1);
-    printf("%c",201);
-    gotoxy(118,1);
-    printf("%c",187);
-    gotoxy(1,47);
-    printf("%c",200);
-    gotoxy(118,47);
-    printf("%c",188);
-
-    for(i=2;i<118;i++){
-        gotoxy(i,1);
-        printf("%c",205);
-    }
-
-    for(i=2;i<118;i++){
-        gotoxy(i,47);
-        printf("%c",205);
-    }
-    for(i=2;i<23;i++){
-        gotoxy(1,i);
-        printf("%c",186);
-    }
-    for(i=23;i<47;i++){
-        gotoxy(1,i);
-        printf("%c",186);
-    }
-
-    for(i=2;i<23;i++){
-        gotoxy(118,i);
-        printf("%c",186);
-    }
-    for(i=23;i<47;i++){
-        gotoxy(118,i);
-        printf("%c",186);
-    }
-    for(i=2;i<23;i++){
-        gotoxy(1,i);
-        printf("%c",186);
-    }
-
-    for(i=2;i<118;i++){
-        gotoxy(i,22);
-        printf("%c",205);
-    }
-
-    gotoxy(1,22);
-    printf("%c",204);
-     gotoxy(118,22);
-    printf("%c",185);
-
-
-
-    gotoxy(37,21);
-    textcolor(LIGHTRED);
-    printf("SISTEMA DE GESTION DE PUBLICIDAD DE LA RADIO \n",224);
-
-    gotoxy(35,48);
-    textcolor(DARKGRAY);
-    printf("Desarrollado por: Mauricio Brito y Luis Prado");
-
-}
-
 //INICIALIZAR LA LISTA
 Radio inicializarListas(Radio estacion_de_radio)
 {
@@ -355,26 +113,16 @@ Secretaria *insertarEnListaSecretarias(char *nombre, char *apellido,int edad, in
 void controlDeUsuarios(Radio estacion_de_radio)
 {
     int op;
-    system("cls");
     do{
-    diseno();
-
+    system("cls");
     textcolor(WHITE);
-    gotoxy(30,26);
-    printf("[1] Registro de locutores");
-    gotoxy(30,28);
-    printf("[2] Registro de secretaria");
-    gotoxy(30,30);
-    printf("[3] Modificar registro de locutor");
-    gotoxy(30,32);
-    printf("[4] Modificar registro de secretaria");
-    gotoxy(30,34);
-    printf("[5] Mostrar listado de locutores");
-    gotoxy(30,36);
-    printf("[6] Mostrar listado de secretarias");
-    gotoxy(30,38);
-    printf("[7] Menu principal");
-    gotoxy(30,40);
+    printf("[1] Registro de locutores \n");
+    printf("[2] Registro de secretaria \n");
+    printf("[3] Modificar registro de locutor \n");
+    printf("[4] Modificar registro de secretaria \n");
+    printf("[5] Mostrar listado de locutores \n");
+    printf("[6] Mostrar listado de secretarias \n");
+    printf("[7] Menu principal \n");
     textcolor(YELLOW);
     printf("Ingrese la opcion:");
     textcolor(WHITE);scanf("%i",&op);
@@ -382,7 +130,7 @@ void controlDeUsuarios(Radio estacion_de_radio)
     switch(op){
         case 1: registroLocutor(estacion_de_radio); break;
         case 2: registroSecretaria(estacion_de_radio);break;
-        case 3: break;
+        case 3: eliminarLocutor(estacion_de_radio);break;
         case 4: break;
         case 5: mostrarListaDeLocutores(estacion_de_radio); break;
         case 6: mostrarListaDeSecretarias(estacion_de_radio);break;
@@ -393,14 +141,13 @@ void controlDeUsuarios(Radio estacion_de_radio)
                   Sleep(1000);
                   system("cls");
     }
-    }while((int)op<1 || (int)op>7);
+    }while(op!=7);
 
 }
 
 void registroSecretaria(Radio estacion_de_radio)
 {
     system("cls");
-    diseno();
     char aux[50];
     char *nombre;
     char *apellido;
@@ -410,48 +157,37 @@ void registroSecretaria(Radio estacion_de_radio)
     static int id=0;
 
     textcolor(WHITE);
-    gotoxy(3,26);
-    printf("Ingrese el nombre de la nueva secretaria:");
+    printf("Ingrese el nombre de la nueva secretaria:\n");
     fflush(stdin);
-    gotoxy(3,27);
     gets(aux);
     nombre=(char*)malloc((strlen(aux)+1)*sizeof(char));
      if (nombre)
         strcpy(nombre,aux);
      else
-        printf("Error no se ha podido crear espacio de memoria para el nombre");
+        printf("Error no se ha podido crear espacio de memoria para el nombre \n");
 
-    gotoxy(3,28);
-    printf("Ingrese el apellido de la nueva secretaria:");
+    printf("Ingrese el apellido de la nueva secretaria:\n");
     fflush(stdin);
-    gotoxy(3,29);
     gets(aux);
     apellido=(char*)malloc((strlen(aux)+1)*sizeof(char));
-    if (nombre)
+    if (apellido)
         strcpy(apellido,aux);
     else
-        printf("Error no se ha podido crear espacio de memoria para el apellido");
+        printf("Error no se ha podido crear espacio de memoria para el apellido\n");
 
-
-    gotoxy(3,30);
-    printf("Ingrese la cedula de la nueva secretaria");
-    gotoxy(3,31);
+    free(aux);
+    printf("Ingrese la cedula de la nueva secretaria\n");
     scanf("%i",&cedula);
 
-    gotoxy(3,32);
-    printf("Ingrese la edad de la nueva secretaria: ");
-    gotoxy(3,33);
+    printf("Ingrese la edad de la nueva secretaria: \n");
     scanf("%i",&edad);
-    gotoxy(3,34);
 
-    printf("Ingrese el sueldo de la nueva secretaria: ");
-    gotoxy(3,35);
+    printf("Ingrese el sueldo de la nueva secretaria: \n");
     scanf("%i",&sueldo);
     id++;
 
     estacion_de_radio.lista_de_secretarias = insertarEnListaSecretarias(nombre,apellido,edad,cedula,id,sueldo, estacion_de_radio);
 
-    gotoxy(39,45);
     printf("SECRETARIA REGISTRADA PRESIONA CUALQUIER TECLA PARA VOLVER...",224);
     getch();
     controlDeUsuarios(estacion_de_radio);
@@ -461,7 +197,6 @@ void registroSecretaria(Radio estacion_de_radio)
 void registroLocutor(Radio estacion_de_radio)
 {
     system("cls");
-    diseno();
     char aux[50];
     char *nombre;
     char *apellido;
@@ -471,48 +206,38 @@ void registroLocutor(Radio estacion_de_radio)
     static int id=0;
 
     textcolor(WHITE);
-    gotoxy(3,26);
-    printf("Ingrese el nombre del nuevo locutor:");
+
+    printf("Ingrese el nombre del nuevo locutor: \n");
     fflush(stdin);
-    gotoxy(3,27);
     gets(aux);
     nombre=(char*)malloc((strlen(aux)+1)*sizeof(char));
      if (nombre)
         strcpy(nombre,aux);
      else
-        printf("Error no se ha podido crear espacio de memoria para el nombre");
+        printf("Error no se ha podido crear espacio de memoria para el nombre \n");
 
-    gotoxy(3,28);
-    printf("Ingrese el apellido del nuevo locutor:");
+    printf("Ingrese el apellido del nuevo locutor: \n");
     fflush(stdin);
-    gotoxy(3,29);
     gets(aux);
     apellido=(char*)malloc((strlen(aux)+1)*sizeof(char));
-    if (nombre)
+    if (apellido)
         strcpy(apellido,aux);
     else
-        printf("Error no se ha podido crear espacio de memoria para el apellido");
+        printf("Error no se ha podido crear espacio de memoria para el apellido \n");
 
-
-    gotoxy(3,30);
-    printf("Ingrese la cedula del locutor");
-    gotoxy(3,31);
+    free(aux);
+    printf("Ingrese la cedula del locutor \n");
     scanf("%i",&cedula);
 
-    gotoxy(3,32);
-    printf("Ingrese la edad del nuevo locutor: ");
-    gotoxy(3,33);
+    printf("Ingrese la edad del nuevo locutor: \n");
     scanf("%i",&edad);
-    gotoxy(3,34);
 
-    printf("Ingrese el sueldo del nuevo locutor: ");
-    gotoxy(3,35);
+    printf("Ingrese el sueldo del nuevo locutor: \n");
     scanf("%i",&sueldo);
     id++;
 
     estacion_de_radio.lista_de_locutores = insertarEnListaLocutores(nombre,apellido,edad,cedula,id,sueldo, estacion_de_radio);
 
-    gotoxy(39,45);
     printf("LOCUTOR REGISTRADO PRESIONA CUALQUIER TECLA PARA VOLVER...",224);
     getch();
     controlDeUsuarios(estacion_de_radio);
@@ -553,7 +278,6 @@ void eliminarLocutor(Radio estacion_de_radio)
         printf("Lo siento no se ha encontrado un locutor registrado con esa cedula\n");
     }
 
-    gotoxy(39,45);
     printf("PRESIONA CUALQUIER TECLA PARA VOLVER...",224);
     getch();
     controlDeUsuarios(estacion_de_radio);
@@ -562,52 +286,36 @@ void eliminarLocutor(Radio estacion_de_radio)
 void mostrarListaDeLocutores(Radio estacion_de_radio)
 {
     system("cls");
-    diseno();
     int i;
     Locutor *cabeza_de_listaAuxiliar;
     cabeza_de_listaAuxiliar=estacion_de_radio.lista_de_locutores;
 
-    textcolor(WHITE);
-    gotoxy(8,26);
-    printf("Id Locutor");
-    gotoxy(26,26);
-    printf("Nombre");
-    gotoxy(40,26);
-    printf("Apellido");
-    gotoxy(54,26);
-    printf("Cedula");
-    gotoxy(68,26);
-    printf("Edad");
-    gotoxy(76,26);
-    printf("Sueldo");
-    gotoxy(84,26);
-    printf("Nombre del programa");
+    textcolor(DARKGRAY);
+    printf("\n");
 
-    for(i=2;i<118;i++){
-        gotoxy(i,27);
+    printf("%-8s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
+
+    for(i=2;i<119;i++){
         printf("%c",196);
        }
-    int  n=28;
+    printf("\n");
+    textcolor(WHITE);
     while(cabeza_de_listaAuxiliar)
     {
-        gotoxy(8,n);
-        printf("%i",cabeza_de_listaAuxiliar->empleado_locutor.id);
-        gotoxy(26,n);
-        printf("%s",cabeza_de_listaAuxiliar->persona_locutor.nombre);
-        gotoxy(40,n);
-        printf("%s",cabeza_de_listaAuxiliar->persona_locutor.apellido);
-        gotoxy(68,n);
-        printf("%i \n",cabeza_de_listaAuxiliar->persona_locutor.edad);
-        gotoxy(54,n);
-        printf("%i ",cabeza_de_listaAuxiliar->persona_locutor.cedula);
-        gotoxy(76,n);
-        printf("%i ",cabeza_de_listaAuxiliar->empleado_locutor.sueldo);
-        cabeza_de_listaAuxiliar=cabeza_de_listaAuxiliar->sig;
-        n++;
-    }
 
-    gotoxy(39,45);
-    printf("PRESIONA CUALQUIER TECLA PARA VOLVER...",224);
+       printf("%-8s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n"," ",cabeza_de_listaAuxiliar->empleado_locutor.id,
+       cabeza_de_listaAuxiliar->persona_locutor.nombre,
+       cabeza_de_listaAuxiliar->persona_locutor.apellido,
+       cabeza_de_listaAuxiliar->persona_locutor.cedula,
+       cabeza_de_listaAuxiliar->persona_locutor.edad,
+       cabeza_de_listaAuxiliar->empleado_locutor.sueldo,
+       "Nombre del programa");
+
+        cabeza_de_listaAuxiliar=cabeza_de_listaAuxiliar->sig;
+
+    }
+    printf("\n");
+    printf("\t \t \t \t \t PRESIONA CUALQUIER TECLA PARA VOLVER...");
     getch();
     controlDeUsuarios(estacion_de_radio);
 }
@@ -615,51 +323,37 @@ void mostrarListaDeLocutores(Radio estacion_de_radio)
 void mostrarListaDeSecretarias(Radio estacion_de_radio)
 {
     system("cls");
-    diseno();
+
     int i;
     Secretaria *cabeza_de_listaAuxiliar;
     cabeza_de_listaAuxiliar=estacion_de_radio.lista_de_secretarias;
 
-    textcolor(WHITE);
-    gotoxy(8,26);
-    printf("Id Secretaria");
-    gotoxy(26,26);
-    printf("Nombre");
-    gotoxy(40,26);
-    printf("Apellido");
-    gotoxy(54,26);
-    printf("Cedula");
-    gotoxy(68,26);
-    printf("Edad");
-    gotoxy(76,26);
-    printf("Sueldo");
+    textcolor(DARKGRAY);
+    printf("\n");
 
+    printf("%-8s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Secretaria","Nombre","Apellido","Cedula","Edad","Sueldo","Horario");
 
-    for(i=2;i<118;i++){
-        gotoxy(i,27);
+    for(i=2;i<119;i++){
         printf("%c",196);
        }
-    int  n=28;
+    printf("\n");
+    textcolor(WHITE);
     while(cabeza_de_listaAuxiliar)
     {
-        gotoxy(8,n);
-        printf("%i",cabeza_de_listaAuxiliar->empleado_secretaria.id);
-        gotoxy(26,n);
-        printf("%s",cabeza_de_listaAuxiliar->persona_secretaria.nombre);
-        gotoxy(40,n);
-        printf("%s",cabeza_de_listaAuxiliar->persona_secretaria.apellido);
-        gotoxy(68,n);
-        printf("%i \n",cabeza_de_listaAuxiliar->persona_secretaria.edad);
-        gotoxy(54,n);
-        printf("%i ",cabeza_de_listaAuxiliar->persona_secretaria.cedula);
-        gotoxy(76,n);
-        printf("%i ",cabeza_de_listaAuxiliar->empleado_secretaria.sueldo);
-        cabeza_de_listaAuxiliar=cabeza_de_listaAuxiliar->sig;
-        n++;
-    }
 
-    gotoxy(39,45);
-    printf("PRESIONA CUALQUIER TECLA PARA VOLVER...",224);
+       printf("%-8s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n"," ",cabeza_de_listaAuxiliar->empleado_secretaria.id,
+       cabeza_de_listaAuxiliar->persona_secretaria.nombre,
+       cabeza_de_listaAuxiliar->persona_secretaria.apellido,
+       cabeza_de_listaAuxiliar->persona_secretaria.cedula,
+       cabeza_de_listaAuxiliar->persona_secretaria.edad,
+       cabeza_de_listaAuxiliar->empleado_secretaria.sueldo,
+       "Horario");
+
+        cabeza_de_listaAuxiliar=cabeza_de_listaAuxiliar->sig;
+
+    }
+    printf("\n");
+    printf("\t \t \t \t \t PRESIONA CUALQUIER TECLA PARA VOLVER...");
     getch();
     controlDeUsuarios(estacion_de_radio);
 }

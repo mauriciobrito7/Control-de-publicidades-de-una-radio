@@ -8,28 +8,19 @@
 // MENU
 void menu (Radio estacion_de_radio){
     int op;
-    system("cls");
-    do{
 
-    diseno();
+    do{
+    system("cls");
     textcolor(WHITE);
-    gotoxy(30,26);
-    printf("[1] Registro de clientes para publicidad");
-    gotoxy(30,28);
-    printf("[2] Control de usuarios");
-    gotoxy(30,30);
-    printf("[3] Buscar cliente");
-    gotoxy(30,32);
-    printf("[4] Gestion de planes y pagos de publicidad");
-    gotoxy(30,34);
-    printf("[5] Modificar cliente");
-    gotoxy(30,36);
-    printf("[6] Listado de clientes");
-    gotoxy(30,38);
-    printf("[7] Salir");
-    gotoxy(30,40);
+    printf("[1] Registro de clientes para publicidad \n");
+    printf("[2] Control de usuarios \n");
+    printf("[3] Buscar cliente \n");
+    printf("[4] Gestion de planes y pagos de publicidad \n");
+    printf("[5] Modificar cliente \n");
+    printf("[6] Listado de clientes \n");
+    printf("[7] Salir \n");
     textcolor(YELLOW);
-    printf("Ingrese la opcion:");
+    printf("Ingrese la opcion: ");
     textcolor(WHITE);scanf("%i",&op);
 
     switch(op){
@@ -39,24 +30,28 @@ void menu (Radio estacion_de_radio){
         case 4: break;
         case 5: break;
         case 6: break;
-        case 7: exit(0);
-        default : gotoxy(50,40);
+        case 7: exit(1);
+        default :
                   textcolor(RED);
                   printf("%cLa opcion que ingreso no es correcta!",173);
                   Sleep(1000);
                   system("cls");
     }
-    }while((int)op<1 || (int)op>7);
+    }while(op!=7);
 }
 
 int main ()
 {
+    //Instaciamos nuestra estación de radio
     Radio mi_estacion;
+    //Inicializamos todas las listas que tenga la radio
     mi_estacion=inicializarListas(mi_estacion);
 
-    //AQUI FALTAN DOS PASOS
-    diseno();
+    //Luego cargariamos los datos en las listas!!
+
+    //Iniciamos el programa llamando al menu
     menu(mi_estacion);
+    //Liberamos toda la memoria reservada para la estacion de radio
     free(mi_estacion.lista_de_locutores);
      return 0;
 }
