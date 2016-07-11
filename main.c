@@ -4,7 +4,9 @@
 #include <conio2.h>
 #include <windows.h>
 #include "Radio.h"
-
+#define ARCHIVO_LOCUTORES "Locutores/Locutores.bin"
+#define MAX_NOMBRE 30
+#define MAX_APELLIDO 50
 // MENU
 void menu (Radio estacion_de_radio){
     int op;

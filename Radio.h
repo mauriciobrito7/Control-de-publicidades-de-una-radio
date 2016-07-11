@@ -2,21 +2,25 @@
 #define _RADIO_H_
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <conio2.h>
+#define ARCHIVO_LOCUTORES "Locutores/Locutores.bin"
+#define MAX_NOMBRE 30
+#define MAX_APELLIDO 50
 
 typedef struct persona
 {
     int edad;
-    char *nombre;
-    char *apellido;
+    char nombre[MAX_NOMBRE];
+    char apellido[MAX_APELLIDO];
     int cedula;
 }Persona;
 
 typedef struct empleado{
     int sueldo;
-    int horario_de_entrada;
-    int horario_de_salida;
+    //int horario_de_entrada;
+    //int horario_de_salida;
     int activo;
     int id;
 }Empleado;
@@ -59,17 +63,12 @@ typedef struct radio{
     Boss dueno;
 }Radio;
 
-void diseno();
+void guardarLocutor(Locutor *nuevoLocutor);
 Radio inicializarListas(Radio estacion_de_radio);
-Locutor * crearLocutor( char *nombre, char *apellido,int edad, int cedula, int id,int sueldo);
-Locutor *insertarEnListaLocutores(char *nombre, char *apellido,int edad, int cedula, int id, int sueldo,Radio estacion_de_radio );
-Secretaria * crearSecretaria( char *nombre, char *apellido,int edad, int cedula, int id,int sueldo);
-Secretaria *insertarEnListaSecretarias(char *nombre, char *apellido,int edad, int cedula, int id, int sueldo, Radio estacion_de_radio);
+Locutor * ingresarLocutorALaLista(Radio estacion_de_radio, Locutor *nuevoLocutor);
 void controlDeUsuarios(Radio estacion_de_radio);
-void registroLocutor(Radio estacion_de_radio);
-void registroSecretaria(Radio estacion_de_radio);
+Locutor * registroLocutor(Radio estacion_de_radio);
 void mostrarListaDeLocutores(Radio estacion_de_radio);
-void mostrarListaDeSecretarias(Radio estacion_de_radio);
-void eliminarLocutor(Radio estacion_de_radio);
+//void eliminarLocutor(Radio estacion_de_radio);
 
 #endif
