@@ -63,12 +63,15 @@ typedef struct radio{
     Boss dueno;
 }Radio;
 
+//DECLARACIÓN DE LAS FUNCIONES
+void pausar();
+void errorCritico();
+void iniciarListas(Radio *estacion_de_radio);
 void guardarLocutor(Locutor *nuevoLocutor);
-Radio inicializarListas(Radio estacion_de_radio);
-Locutor * ingresarLocutorALaLista(Radio estacion_de_radio, Locutor *nuevoLocutor);
-void controlDeUsuarios(Radio estacion_de_radio);
-Locutor * registroLocutor(Radio estacion_de_radio);
-void mostrarListaDeLocutores(Radio estacion_de_radio);
+void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor);
+void registroLocutor(Radio *estacion_de_radio);
+void mostrarListaDeLocutores(Radio *estacion_de_radio);
+void eliminarListaLocutor(Radio * estacion_de_radio);
 //void eliminarLocutor(Radio estacion_de_radio);
 
 #endif

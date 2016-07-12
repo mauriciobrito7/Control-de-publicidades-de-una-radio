@@ -7,8 +7,24 @@
 #define ARCHIVO_LOCUTORES "Locutores/Locutores.bin"
 #define MAX_NOMBRE 30
 #define MAX_APELLIDO 50
+
+void menu (Radio *estacion_de_radio);
+void controlDeUsuarios(Radio *estacion_de_radio);
+
+int main ()
+{
+    //INSTANCIAR RADIO QUE CONTIENE TODAS LAS ESTRUCTURAS
+	Radio mi_estacion_de_radio;
+	//CARGAR LA LISTA CON LOS REGISTROS DEL ARCHIVO
+	//cargarListaLocutores(&mi_estacion_de_radio);
+	iniciarListas(&mi_estacion_de_radio);
+	menu(&mi_estacion_de_radio);
+	pausar();
+	return 0;
+}
+
 // MENU
-void menu (Radio estacion_de_radio){
+void menu (Radio *estacion_de_radio){
     int op;
 
     do{
@@ -32,7 +48,9 @@ void menu (Radio estacion_de_radio){
         case 4: break;
         case 5: break;
         case 6: break;
-        case 7: exit(1);
+        case 7: eliminarListaLocutor(estacion_de_radio);
+				free(estacion_de_radio->lista_de_locutores);
+        		exit(1);
         default :
                   textcolor(RED);
                   printf("%cLa opcion que ingreso no es correcta!",173);
@@ -42,18 +60,37 @@ void menu (Radio estacion_de_radio){
     }while(op!=7);
 }
 
-int main ()
+void controlDeUsuarios(Radio *estacion_de_radio)
 {
-    //Instaciamos nuestra estación de radio
-    Radio mi_estacion;
-    //Inicializamos todas las listas que tenga la radio
-    mi_estacion=inicializarListas(mi_estacion);
+    int op;
+    do{
+    system("cls");
+    textcolor(WHITE);
+    printf("[1] Registro de locutores \n");
+    printf("[2] Registro de secretaria \n");
+    printf("[3] Modificar registro de locutor \n");
+    printf("[4] Modificar registro de secretaria \n");
+    printf("[5] Mostrar listado de locutores \n");
+    printf("[6] Mostrar listado de secretarias \n");
+    printf("[7] Menu principal \n");
+    textcolor(YELLOW);
+    printf("Ingrese la opcion:");
+    textcolor(WHITE);scanf("%i",&op);
 
-    //Luego cargariamos los datos en las listas!!
+    switch(op){
+        case 1: registroLocutor(estacion_de_radio); break;
+        case 2: //registroSecretaria(estacion_de_radio);break;
+        case 3: //eliminarLocutor(estacion_de_radio);break;
+        case 4: break;
+        case 5: mostrarListaDeLocutores(estacion_de_radio); break;
+        case 6: //mostrarListaDeSecretarias(estacion_de_radio);break;
+        case 7: menu(estacion_de_radio); break;
+        default : gotoxy(30,40);
+                  textcolor(RED);
+                  printf("%cLa opcion que ingreso no es correcta!",173);
+                  Sleep(1000);
+                  system("cls");
+    }
+    }while(op!=7);
 
-    //Iniciamos el programa llamando al menu
-    menu(mi_estacion);
-    //Liberamos toda la memoria reservada para la estacion de radio
-    free(mi_estacion.lista_de_locutores);
-     return 0;
 }

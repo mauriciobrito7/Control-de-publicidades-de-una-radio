@@ -7,157 +7,115 @@ void pausar(){
     getch();
 }
 
-//INICIALIZAR LA LISTA
-Radio inicializarListas(Radio estacion_de_radio)
+void errorCritico()
 {
-    estacion_de_radio.lista_de_locutores=NULL;
-    estacion_de_radio.lista_de_secretarias=NULL;
-    return estacion_de_radio;
+  printf("No se ha podido reservar memoria\n");
+  pausar();
+  exit(1);
 }
+//INICIALIZAR LA LISTA
+void iniciarListas(Radio *estacion_de_radio){
+	estacion_de_radio->lista_de_locutores=NULL;
+}
+
 
 void guardarLocutor(Locutor *nuevoLocutor){
 	FILE *file;
+
 	file=fopen(ARCHIVO_LOCUTORES,"ab");
 	if(!file){
-		printf("No se ha podido abrir el archivo para guardar Locutor\n");
-			pausar();
-			exit(1);
+		errorCritico();
 	}else{
 		fwrite(nuevoLocutor, sizeof(Locutor), 1,file);
 	}
 	fclose(file);
 }
 
-Locutor * ingresarLocutorALaLista(Radio estacion_de_radio, Locutor *nuevoLocutor){
-	Locutor *listaAuxiliar;
-	nuevoLocutor->sig=NULL;
-	if(!estacion_de_radio.lista_de_locutores){
-		estacion_de_radio.lista_de_locutores=nuevoLocutor;
-			guardarLocutor(nuevoLocutor);
+void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor){
+	if(!estacion_de_radio->lista_de_locutores){
+		estacion_de_radio->lista_de_locutores=nuevoLocutor;
 	}
 	else{
-		listaAuxiliar=estacion_de_radio.lista_de_locutores;
+		Locutor *listaAuxiliar;
+		listaAuxiliar=estacion_de_radio->lista_de_locutores;
 		while(listaAuxiliar->sig)
 			listaAuxiliar=listaAuxiliar->sig;
 		listaAuxiliar->sig=nuevoLocutor;
-			guardarLocutor(nuevoLocutor);
+
 	}
-	return estacion_de_radio.lista_de_locutores;
 }
 
-
-Locutor * registroLocutor(Radio estacion_de_radio){
+void registroLocutor(Radio *estacion_de_radio){
 	system("cls");
-	char nombre[MAX_NOMBRE],apellido[MAX_APELLIDO];
-    int edad, cedula, sueldo;
+
     Locutor *nuevoLocutor;
-    nuevoLocutor=(Locutor*)malloc(sizeof(Locutor));
-    FILE * file=fopen(ARCHIVO_LOCUTORES,"rb");
+    nuevoLocutor=(Locutor*)calloc(1,sizeof(Locutor));
+
     if(!nuevoLocutor){
-    	printf("No se ha podido reservar memoria para el nuevo locutor\n");
-    	pausar();
-    	exit(1);
+    	errorCritico();
     }
     else{
+    	FILE * file=fopen(ARCHIVO_LOCUTORES,"rb");
+	    int id=0;
 
-    static int id=0;
-    while(fread(nuevoLocutor, sizeof(Locutor),1, file))
-    	id=nuevoLocutor->empleado_locutor.id;
-    printf("Ingrese el nombre del nuevo locutor: \n");
-    fflush(stdin);
-    gets(nombre);
+	    fseek(file,(sizeof(Locutor)*(-1)),SEEK_END);
+	    if(fread(nuevoLocutor,sizeof(Locutor),1,file))
+	    	id=nuevoLocutor->empleado_locutor.id;
 
-    printf("Ingrese el apellido del nuevo locutor: \n");
-    fflush(stdin);
-    gets(apellido);
+	    printf("Ingrese el nombre del nuevo locutor: \n");
+	    fflush(stdin);
+	    gets(nuevoLocutor->persona_locutor.nombre);
 
-    printf("Ingrese la cedula del locutor \n");
-    scanf("%i",&cedula);
+	    printf("Ingrese el apellido del nuevo locutor: \n");
+	    fflush(stdin);
+	    gets(nuevoLocutor->persona_locutor.apellido);
 
-    printf("Ingrese la edad del nuevo locutor: \n");
-    scanf("%i",&edad);
+	    printf("Ingrese la cedula del locutor \n");
+	    scanf("%i",&nuevoLocutor->persona_locutor.cedula);
 
-    printf("Ingrese el sueldo del nuevo locutor: \n");
-    scanf("%i",&sueldo);
-    id++;
-    strcpy(nuevoLocutor->persona_locutor.nombre,nombre);
-	strcpy(nuevoLocutor->persona_locutor.apellido,apellido);
-	nuevoLocutor->persona_locutor.edad=edad;
-	nuevoLocutor->persona_locutor.cedula=cedula;
-	nuevoLocutor->empleado_locutor.sueldo=sueldo;
-	nuevoLocutor->empleado_locutor.id=id;
-	nuevoLocutor->empleado_locutor.activo=1;
-	nuevoLocutor->sig=NULL;
-    estacion_de_radio.lista_de_locutores = ingresarLocutorALaLista( estacion_de_radio,nuevoLocutor);
+	    printf("Ingrese la edad del nuevo locutor: \n");
+	    scanf("%i",&nuevoLocutor->persona_locutor.edad);
+
+	    printf("Ingrese el sueldo del nuevo locutor: \n");
+	    scanf("%i",&nuevoLocutor->empleado_locutor.sueldo);
+	    id++;
+		nuevoLocutor->empleado_locutor.id=id;
+		nuevoLocutor->empleado_locutor.activo=1;
+		nuevoLocutor->sig=NULL;
+		fclose(file);
+	    ingresarLocutorALaLista(estacion_de_radio,nuevoLocutor);
+	    guardarLocutor(nuevoLocutor);
     }
-    printf("\t \t \t LOCUTOR REGISTRADO PRESIONA CUALQUIER TECLA PARA VOLVER...");
-    getch();
-    return estacion_de_radio.lista_de_locutores;
 }
 
-void mostrarListaDeLocutores(Radio estacion_de_radio)
-{
-    system("cls");
+void mostrarListaDeLocutores(Radio *estacion_de_radio){
+	system("cls");
 	FILE *file;
 	file=fopen(ARCHIVO_LOCUTORES,"rb");
-	Locutor *locutorALeer;
+	Locutor locutorALeer;
 
-	locutorALeer=(Locutor*)malloc(sizeof(Locutor));
-	 if(!file){
-	 	system("cls");
-		printf("La lista esta vacia\n");
-	 }else{
-	 	 printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
-	 	 while(fread(locutorALeer, sizeof(Locutor),1, file)){
-	 	   printf("%-10s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n"," ",locutorALeer->empleado_locutor.id,
-	       locutorALeer->persona_locutor.nombre,
-	       locutorALeer->persona_locutor.apellido,
-	       locutorALeer->persona_locutor.cedula,
-	       locutorALeer->persona_locutor.edad,
-	       locutorALeer->empleado_locutor.sueldo,
-	       "Nombre del programa");
-	    }
+	printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
+	while(fread(&locutorALeer, sizeof(Locutor),1, file)){
+	 	printf("%-10s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n"," ",locutorALeer.empleado_locutor.id,
+	    locutorALeer.persona_locutor.nombre,
+	    locutorALeer.persona_locutor.apellido,
+	    locutorALeer.persona_locutor.cedula,
+	    locutorALeer.persona_locutor.edad,
+	    locutorALeer.empleado_locutor.sueldo,
+	    "Nombre del programa");
 	}
 	printf("\n");
 	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
     getch();
 }
 
-
-
-void controlDeUsuarios(Radio estacion_de_radio)
-{
-    int op;
-    do{
-    system("cls");
-    textcolor(WHITE);
-    printf("[1] Registro de locutores \n");
-    printf("[2] Registro de secretaria \n");
-    printf("[3] Modificar registro de locutor \n");
-    printf("[4] Modificar registro de secretaria \n");
-    printf("[5] Mostrar listado de locutores \n");
-    printf("[6] Mostrar listado de secretarias \n");
-    printf("[7] Menu principal \n");
-    textcolor(YELLOW);
-    printf("Ingrese la opcion:");
-    textcolor(WHITE);scanf("%i",&op);
-
-    switch(op){
-        case 1: estacion_de_radio.lista_de_locutores= registroLocutor(estacion_de_radio); break;
-        case 2: //registroSecretaria(estacion_de_radio);break;
-        case 3: //eliminarLocutor(estacion_de_radio);break;
-        case 4: break;
-        case 5: mostrarListaDeLocutores(estacion_de_radio); break;
-        case 6: //mostrarListaDeSecretarias(estacion_de_radio);break;
-        case 7: menu(); break;
-        default : gotoxy(30,40);
-                  textcolor(RED);
-                  printf("%cLa opcion que ingreso no es correcta!",173);
-                  Sleep(1000);
-                  system("cls");
-    }
-    }while(op!=7);
-
+void eliminarListaLocutor(Radio * estacion_de_radio){
+	Locutor *listaAuxiliar;
+	while(estacion_de_radio->lista_de_locutores){
+		listaAuxiliar=estacion_de_radio->lista_de_locutores;
+		estacion_de_radio->lista_de_locutores=estacion_de_radio->lista_de_locutores->sig;
+		free(listaAuxiliar);
+	}
 }
 
 

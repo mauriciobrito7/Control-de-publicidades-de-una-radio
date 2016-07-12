@@ -15,7 +15,7 @@
 	<windows.h>
 	"Radio.h"
 
-1468223315 source:c:\users\mauricio\desktop\control-de-publicidades-de-radio\main.c
+1468346843 source:c:\users\mauricio\desktop\control-de-publicidades-de-radio\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -23,12 +23,12 @@
 	<windows.h>
 	"Radio.h"
 
-1468223721 c:\users\mauricio\desktop\control-de-publicidades-de-radio\radio.h
+1468346752 c:\users\mauricio\desktop\control-de-publicidades-de-radio\radio.h
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
 	<conio2.h>
 
-1468223733 source:c:\users\mauricio\desktop\control-de-publicidades-de-radio\radio.c
+1468346895 source:c:\users\mauricio\desktop\control-de-publicidades-de-radio\radio.c
 	"Radio.h"
 
