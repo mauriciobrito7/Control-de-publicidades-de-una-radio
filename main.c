@@ -1,12 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <conio2.h>
 #include <windows.h>
 #include "Radio.h"
-#define ARCHIVO_LOCUTORES "Locutores/Locutores.bin"
-#define MAX_NOMBRE 30
-#define MAX_APELLIDO 50
+
 
 void menu (Radio *estacion_de_radio);
 void controlDeUsuarios(Radio *estacion_de_radio);
@@ -30,13 +27,11 @@ void menu (Radio *estacion_de_radio){
     do{
     system("cls");
     textcolor(WHITE);
-    printf("[1] Registro de clientes para publicidad \n");
-    printf("[2] Control de usuarios \n");
-    printf("[3] Buscar cliente \n");
-    printf("[4] Gestion de planes y pagos de publicidad \n");
-    printf("[5] Modificar cliente \n");
-    printf("[6] Listado de clientes \n");
-    printf("[7] Salir \n");
+    printf("[1] Gestion de clientes para la publicidad \n");
+    printf("[2] Gestion de usuarios de la radio\n");
+    printf("[3] Gestion de planes de las publicidades \n");
+    printf("[4] Listado de clientes \n");
+    printf("[5] Salir \n");
     textcolor(YELLOW);
     printf("Ingrese la opcion: ");
     textcolor(WHITE);scanf("%i",&op);
@@ -46,9 +41,7 @@ void menu (Radio *estacion_de_radio){
         case 2: controlDeUsuarios(estacion_de_radio); break;
         case 3: break;
         case 4: break;
-        case 5: break;
-        case 6: break;
-        case 7: eliminarListaLocutor(estacion_de_radio);
+        case 5: eliminarListaLocutor(estacion_de_radio);
 				free(estacion_de_radio->lista_de_locutores);
         		exit(1);
         default :
@@ -57,7 +50,7 @@ void menu (Radio *estacion_de_radio){
                   Sleep(1000);
                   system("cls");
     }
-    }while(op!=7);
+    }while(op!=5);
 }
 
 void controlDeUsuarios(Radio *estacion_de_radio)
@@ -72,25 +65,27 @@ void controlDeUsuarios(Radio *estacion_de_radio)
     printf("[4] Modificar registro de secretaria \n");
     printf("[5] Mostrar listado de locutores \n");
     printf("[6] Mostrar listado de secretarias \n");
-    printf("[7] Menu principal \n");
+    printf("[7] Mostrar due%co \n",164);
+    printf("[8] Menu principal \n");
     textcolor(YELLOW);
     printf("Ingrese la opcion:");
     textcolor(WHITE);scanf("%i",&op);
 
     switch(op){
         case 1: registroLocutor(estacion_de_radio); break;
-        case 2: //registroSecretaria(estacion_de_radio);break;
+        case 2: registroSecretaria(estacion_de_radio);break;
         case 3: //eliminarLocutor(estacion_de_radio);break;
         case 4: break;
-        case 5: mostrarListaDeLocutores(estacion_de_radio); break;
-        case 6: //mostrarListaDeSecretarias(estacion_de_radio);break;
-        case 7: menu(estacion_de_radio); break;
+        case 5: mostrarListaDeLocutores(); break;
+        case 6: mostrarListaDeSecretarias();break;
+        case 7: break;
+        case 8: menu(estacion_de_radio); break;
         default : gotoxy(30,40);
                   textcolor(RED);
                   printf("%cLa opcion que ingreso no es correcta!",173);
                   Sleep(1000);
                   system("cls");
     }
-    }while(op!=7);
+    }while(op!=8);
 
 }

@@ -5,7 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <conio2.h>
-#define ARCHIVO_LOCUTORES "Locutores/Locutores.bin"
+#define ARCHIVO_LOCUTORES "Registros/Locutores/Locutores.bin"
+#define ARCHIVO_SECRETARIAS "Registros/Secretarias/Secretarias.bin"
 #define MAX_NOMBRE 30
 #define MAX_APELLIDO 50
 
@@ -64,13 +65,23 @@ typedef struct radio{
 }Radio;
 
 //DECLARACIÓN DE LAS FUNCIONES
+//MENSAJES DE CONTROL
 void pausar();
 void errorCritico();
+//INICIAR LAS LISTAS DE LA RADIO
 void iniciarListas(Radio *estacion_de_radio);
+//GUARDAR REGISTROS DE LOS ARCHIVOS
 void guardarLocutor(Locutor *nuevoLocutor);
+void guardarSecretaria(Secretaria *nuevaSecretaria);
+//INGRESOS EN LA LISTA
 void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor);
+void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nuevaSecretaria);
+//REGISTROS
 void registroLocutor(Radio *estacion_de_radio);
-void mostrarListaDeLocutores(Radio *estacion_de_radio);
+void registroSecretaria(Radio *estacion_de_radio);
+//MOSTRAR CONTENIDO
+void mostrarListaDeLocutores();
+void mostrarListaDeSecretarias();
 void eliminarListaLocutor(Radio * estacion_de_radio);
 //void eliminarLocutor(Radio estacion_de_radio);
 

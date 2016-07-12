@@ -10,12 +10,13 @@ void pausar(){
 void errorCritico()
 {
   printf("No se ha podido reservar memoria\n");
-  pausar();
+  getch();
   exit(1);
 }
 //INICIALIZAR LA LISTA
 void iniciarListas(Radio *estacion_de_radio){
 	estacion_de_radio->lista_de_locutores=NULL;
+	estacion_de_radio->lista_de_secretarias=NULL;
 }
 
 
@@ -31,6 +32,18 @@ void guardarLocutor(Locutor *nuevoLocutor){
 	fclose(file);
 }
 
+void guardarSecretaria(Secretaria *nuevaSecretaria){
+	FILE *file;
+
+	file=fopen(ARCHIVO_SECRETARIAS,"ab");
+	if(!file){
+		errorCritico();
+	}else{
+		fwrite(nuevaSecretaria, sizeof(Secretaria), 1,file);
+	}
+	fclose(file);
+}
+
 void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor){
 	if(!estacion_de_radio->lista_de_locutores){
 		estacion_de_radio->lista_de_locutores=nuevoLocutor;
@@ -41,6 +54,20 @@ void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor){
 		while(listaAuxiliar->sig)
 			listaAuxiliar=listaAuxiliar->sig;
 		listaAuxiliar->sig=nuevoLocutor;
+
+	}
+}
+
+void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nuevaSecretaria){
+	if(!estacion_de_radio->lista_de_secretarias){
+		estacion_de_radio->lista_de_secretarias=nuevaSecretaria;
+	}
+	else{
+		Locutor *listaAuxiliar;
+		listaAuxiliar=estacion_de_radio->lista_de_secretarias;
+		while(listaAuxiliar->sig)
+			listaAuxiliar=listaAuxiliar->sig;
+		listaAuxiliar->sig=nuevaSecretaria;
 
 	}
 }
@@ -88,7 +115,50 @@ void registroLocutor(Radio *estacion_de_radio){
     }
 }
 
-void mostrarListaDeLocutores(Radio *estacion_de_radio){
+void registroSecretaria(Radio *estacion_de_radio){
+	system("cls");
+
+    Secretaria *nuevaSecretaria;
+    nuevaSecretaria=(Secretaria*)calloc(1,sizeof(Secretaria));
+
+    if(!nuevaSecretaria){
+    	errorCritico();
+    }
+    else{
+    	FILE * file=fopen(ARCHIVO_SECRETARIAS,"rb");
+	    int id=0;
+
+	    fseek(file,(sizeof(Secretaria)*(-1)),SEEK_END);
+	    if(fread(nuevaSecretaria,sizeof(Secretaria),1,file))
+	    	id=nuevaSecretaria->empleado_secretaria.id;
+
+	    printf("Ingrese el nombre del nueva Secretaria: \n");
+	    fflush(stdin);
+	    gets(nuevaSecretaria->persona_secretaria.nombre);
+
+	    printf("Ingrese el apellido del nueva Secretaria: \n");
+	    fflush(stdin);
+	    gets(nuevaSecretaria->persona_secretaria.apellido);
+
+	    printf("Ingrese la cedula del Secretaria \n");
+	    scanf("%i",&nuevaSecretaria->persona_secretaria.cedula);
+
+	    printf("Ingrese la edad del nueva Secretaria: \n");
+	    scanf("%i",&nuevaSecretaria->persona_secretaria.edad);
+
+	    printf("Ingrese el sueldo del nueva Secretaria: \n");
+	    scanf("%i",&nuevaSecretaria->empleado_secretaria.sueldo);
+	    id++;
+		nuevaSecretaria->empleado_secretaria.id=id;
+		nuevaSecretaria->empleado_secretaria.activo=1;
+		nuevaSecretaria->sig=NULL;
+		fclose(file);
+	    ingresarSecretariaALaLista(estacion_de_radio,nuevaSecretaria);
+	    guardarSecretaria(nuevaSecretaria);
+    }
+}
+
+void mostrarListaDeLocutores(){
 	system("cls");
 	FILE *file;
 	file=fopen(ARCHIVO_LOCUTORES,"rb");
@@ -108,6 +178,29 @@ void mostrarListaDeLocutores(Radio *estacion_de_radio){
 	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
     getch();
 }
+
+void mostrarListaDeSecretarias(){
+	system("cls");
+	FILE *file;
+	file=fopen(ARCHIVO_SECRETARIAS,"rb");
+	Secretaria secretariaALeer;
+
+	printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
+	while(fread(&secretariaALeer, sizeof(Locutor),1, file)){
+	 	printf("%-10s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n"," ",secretariaALeer.empleado_secretaria.id,
+	    secretariaALeer.persona_secretaria.nombre,
+	    secretariaALeer.persona_secretaria.apellido,
+	    secretariaALeer.persona_secretaria.cedula,
+	    secretariaALeer.persona_secretaria.edad,
+	    secretariaALeer.empleado_secretaria.sueldo,
+	    "Nombre del programa");
+	}
+	printf("\n");
+	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
+    getch();
+}
+
+
 
 void eliminarListaLocutor(Radio * estacion_de_radio){
 	Locutor *listaAuxiliar;
