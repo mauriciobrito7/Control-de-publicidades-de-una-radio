@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <conio2.h>
+#include <windows.h>
 #define ARCHIVO_LOCUTORES "Registros/Locutores/Locutores.bin"
 #define ARCHIVO_SECRETARIAS "Registros/Secretarias/Secretarias.bin"
 #define MAX_NOMBRE 30
@@ -82,6 +83,10 @@ void registroSecretaria(Radio *estacion_de_radio);
 //MOSTRAR CONTENIDO
 void mostrarListaDeLocutores();
 void mostrarListaDeSecretarias();
+//MODIFICACIONES DE REGISTRO
+int buscarLocutor(Locutor *locutorAModificar);
+void modificarRegistroLocutor(Radio * estacion_de_radio);
+
 void eliminarListaLocutor(Radio * estacion_de_radio);
 //void eliminarLocutor(Radio estacion_de_radio);
 

@@ -44,11 +44,7 @@ void menu (Radio *estacion_de_radio){
         case 5: eliminarListaLocutor(estacion_de_radio);
 				free(estacion_de_radio->lista_de_locutores);
         		exit(1);
-        default :
-                  textcolor(RED);
-                  printf("%cLa opcion que ingreso no es correcta!",173);
-                  Sleep(1000);
-                  system("cls");
+        default : mensajePorDefecto();
     }
     }while(op!=5);
 }
@@ -74,17 +70,13 @@ void controlDeUsuarios(Radio *estacion_de_radio)
     switch(op){
         case 1: registroLocutor(estacion_de_radio); break;
         case 2: registroSecretaria(estacion_de_radio);break;
-        case 3: //eliminarLocutor(estacion_de_radio);break;
+        case 3: modificarRegistroLocutor(estacion_de_radio); break;
         case 4: break;
         case 5: mostrarListaDeLocutores(); break;
         case 6: mostrarListaDeSecretarias();break;
         case 7: break;
         case 8: menu(estacion_de_radio); break;
-        default : gotoxy(30,40);
-                  textcolor(RED);
-                  printf("%cLa opcion que ingreso no es correcta!",173);
-                  Sleep(1000);
-                  system("cls");
+        default : mensajePorDefecto();
     }
     }while(op!=8);
 

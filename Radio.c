@@ -13,6 +13,14 @@ void errorCritico()
   getch();
   exit(1);
 }
+
+void mensajePorDefecto()
+{
+    textcolor(RED);
+    printf("%cLa opcion que ingreso no es correcta!",173);
+    Sleep(1000);
+}
+
 //INICIALIZAR LA LISTA
 void iniciarListas(Radio *estacion_de_radio){
 	estacion_de_radio->lista_de_locutores=NULL;
@@ -112,6 +120,85 @@ void registroLocutor(Radio *estacion_de_radio){
 		fclose(file);
 	    ingresarLocutorALaLista(estacion_de_radio,nuevoLocutor);
 	    guardarLocutor(nuevoLocutor);
+    }
+}
+
+int buscarLocutor(Locutor *locutorAModificar){
+    FILE * file;
+    file=fopen(ARCHIVO_LOCUTORES, "rb");
+    if(!file){
+        printf("No hay registros en el archivo\n");
+        pausar();
+    }else{
+        int op=0;
+
+        do{
+        system("cls");
+        textcolor(WHITE);
+        printf("[1] Buscar por ID\n");
+        printf("[2] Buscar por cedula\n");
+        textcolor(YELLOW);
+        printf("Ingrese la opcion: ");
+        textcolor(WHITE);scanf("%i",&op);
+
+        switch(op){
+            case 1: break;
+            case 2: system("cls");
+                    int cedula;
+                    printf("Ingresar Cedula: \n");
+                    scanf("%i",&cedula);
+                    while(fread(locutorAModificar,sizeof(Locutor),1,file)){
+                        if(locutorAModificar->persona_locutor.cedula==cedula){
+                            fclose(file);
+                            return 1;
+                        }
+                    }
+                    break;
+            default : mensajePorDefecto(); break;
+        }
+        printf("No hay ningun Locutor registrado con esa Cedula\n");
+        pausar();
+        fclose(file);
+        return NULL;
+        }while(op!=3);
+
+    }
+
+}
+
+void modificarRegistroLocutor(Radio * estacion_de_radio){
+    Locutor locutorAModificar;
+    FILE *file;
+    if(buscarLocutor(&locutorAModificar)){
+        int op=0;
+        do{
+            system("cls");
+            textcolor(WHITE);
+            printf("[1] Modificar sueldo base\n");
+            printf("[2] Despedir Locutor\n");
+            textcolor(YELLOW);
+            printf("Ingrese la opcion: ");
+            textcolor(WHITE);scanf("%i",&op);
+
+            switch(op){
+                case 1:
+                        file=fopen(ARCHIVO_LOCUTORES,"r+b");
+                        if(!file){
+                         errorCritico();
+                        }else{
+                            system("cls");
+                            printf("Ingrese el nuevo sueldo para el locutor %s:",locutorAModificar.persona_locutor.nombre);
+                            scanf("%i",&locutorAModificar.empleado_locutor.sueldo);
+                            fseek(file,(sizeof(Locutor)*(locutorAModificar.empleado_locutor.id))-sizeof(Locutor),0);
+                                fwrite(&locutorAModificar,sizeof(Locutor),1,file);
+                            printf("Locutor Modificado..\n");
+                            fclose(file);
+                            getch(); controlDeUsuarios(estacion_de_radio); break;
+                        }
+                case 2: break;
+                default : mensajePorDefecto(); break;
+            }
+        }while(op!=3);
     }
 }
 
