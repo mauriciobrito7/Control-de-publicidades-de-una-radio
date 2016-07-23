@@ -13,11 +13,9 @@ int main ()
     //INSTANCIAR RADIO QUE CONTIENE TODAS LAS ESTRUCTURAS
 	Radio mi_estacion_de_radio;
 	//CARGAR LA LISTA CON LOS REGISTROS DEL ARCHIVO
-	//cargarListaLocutores(&mi_estacion_de_radio);
 	iniciarListas(&mi_estacion_de_radio);
+	cargarListaLocutores(&mi_estacion_de_radio);
 	menu(&mi_estacion_de_radio);
-	pausar();
-	eliminarListaLocutor(mi_estacion_de_radio.lista_de_locutores);
 	return 0;
 }
 
@@ -50,35 +48,3 @@ void menu (Radio *estacion_de_radio){
     }while(op!=5);
 }
 
-void controlDeUsuarios(Radio *estacion_de_radio)
-{
-    int op;
-    do{
-    system("cls");
-    textcolor(WHITE);
-    printf("[1] Registro de locutores \n");
-    printf("[2] Registro de secretaria \n");
-    printf("[3] Modificar registro de locutor \n");
-    printf("[4] Modificar registro de secretaria \n");
-    printf("[5] Mostrar listado de locutores \n");
-    printf("[6] Mostrar listado de secretarias \n");
-    printf("[7] Mostrar due%co \n",164);
-    printf("[8] Menu principal \n");
-    textcolor(YELLOW);
-    printf("Ingrese la opcion:");
-    textcolor(WHITE);scanf("%i",&op);
-
-    switch(op){
-        case 1: registroLocutor(estacion_de_radio); break;
-        case 2: registroSecretaria(estacion_de_radio);break;
-        case 3: modificarRegistroLocutor(estacion_de_radio); break;
-        case 4: break;
-        case 5: mostrarListaDeLocutores(); break;
-        case 6: mostrarListaDeSecretarias();break;
-        case 7: break;
-        case 8: menu(estacion_de_radio); break;
-        default : mensajePorDefecto();
-    }
-    }while(op!=8);
-
-}

@@ -69,8 +69,11 @@ typedef struct radio{
 //MENSAJES DE CONTROL
 void pausar();
 void errorCritico();
+//MENU DE CONTROL DE USUARIO
+void controlDeUsuarios(Radio *estacion_de_radio);
 //INICIAR LAS LISTAS DE LA RADIO
 void iniciarListas(Radio *estacion_de_radio);
+void cargarListaLocutores(Radio *estacion_de_radio);
 //GUARDAR REGISTROS DE LOS ARCHIVOS
 static void guardarLocutor(Locutor *nuevoLocutor);
 static void guardarSecretaria(Secretaria *nuevaSecretaria);
@@ -82,12 +85,14 @@ void registroLocutor(Radio *estacion_de_radio);
 void registroSecretaria(Radio *estacion_de_radio);
 //MOSTRAR CONTENIDO
 void mostrarListaDeLocutores();
+//MUESTRA LA LISTA ENLAZADA
+void mostrarListaDeLocutores2(Radio *estacion_de_radio);
 void mostrarListaDeSecretarias();
 //MODIFICACIONES DE REGISTRO
-int buscarLocutor(Locutor *locutorAModificar);
-void modificarRegistroLocutor(Radio * estacion_de_radio);
+Locutor * buscarLocutor(Radio * estacion_de_radio,Locutor *locutorAModificar);
+static void modificarRegistroLocutor(Radio * estacion_de_radio);
 
 void eliminarListaLocutor(Radio * estacion_de_radio);
-//void eliminarLocutor(Radio estacion_de_radio);
+static Locutor * eliminarLocutor(Radio *estacion_de_radio , Locutor *locutorAModificar);
 
 #endif

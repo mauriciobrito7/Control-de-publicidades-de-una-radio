@@ -27,6 +27,63 @@ void iniciarListas(Radio *estacion_de_radio){
 	estacion_de_radio->lista_de_secretarias=NULL;
 }
 
+void cargarListaLocutores(Radio *estacion_de_radio){
+	//INICIO LA LISTA DE LOCUTORES EN NULL
+	system("cls");
+	//TRATO DE LEER EL ARCHIVO PARA CARGAR LAS LISTAS
+	FILE *file;
+	file=fopen(ARCHIVO_LOCUTORES,"rb+");
+	//SI NO SE PUDO LEER ES PORQUE NO EXISTE
+	 if(!file){
+	 	system("cls");
+		printf("El archivo esta vacio\n");
+		pausar();
+	 }else{
+	 	Locutor *locutorALeer;
+	 	rewind(file);
+        locutorALeer=(Locutor*)malloc(sizeof(Locutor));
+
+	 //DE OTRA MANERA MIENTRAS VAYA LEYENDO EL LOCUTOR QUE LO VAYA INGRENSANDO EN LA LISTA
+        while(fread(locutorALeer, sizeof(Locutor),1, file)){
+	        ingresarLocutorALaLista(estacion_de_radio,locutorALeer);
+            locutorALeer=(Locutor*)malloc(sizeof(Locutor));
+        }
+	 }
+	 fclose(file);
+}
+
+void controlDeUsuarios(Radio *estacion_de_radio)
+{
+    int op;
+    do{
+    system("cls");
+    textcolor(WHITE);
+    printf("[1] Registro de locutores \n");
+    printf("[2] Registro de secretaria \n");
+    printf("[3] Modificar registro de locutor \n");
+    printf("[4] Modificar registro de secretaria \n");
+    printf("[5] Mostrar listado de locutores \n");
+    printf("[6] Mostrar listado de secretarias \n");
+    printf("[7] Mostrar due%co \n",164);
+    printf("[8] Menu principal \n");
+    textcolor(YELLOW);
+    printf("Ingrese la opcion:");
+    textcolor(WHITE);scanf("%i",&op);
+
+    switch(op){
+        case 1: registroLocutor(estacion_de_radio); break;
+        case 2: registroSecretaria(estacion_de_radio);break;
+        case 3: modificarRegistroLocutor(estacion_de_radio); break;
+        case 4: mostrarListaDeLocutores2(estacion_de_radio); break;
+        case 5: mostrarListaDeLocutores(); break;
+        case 6: mostrarListaDeSecretarias();break;
+        case 7: break;
+        case 8: menu(estacion_de_radio); break;
+        default : mensajePorDefecto();
+    }
+    }while(op!=8);
+
+}
 
 static void guardarLocutor(Locutor *nuevoLocutor){
 	FILE *file;
@@ -123,15 +180,9 @@ void registroLocutor(Radio *estacion_de_radio){
     }
 }
 
-int buscarLocutor(Locutor *locutorAModificar){
-    FILE * file;
-    file=fopen(ARCHIVO_LOCUTORES, "rb");
-    if(!file){
-        printf("No hay registros en el archivo\n");
-        pausar();
-    }else{
-        int op=0;
+Locutor * buscarLocutor(Radio * estacion_de_radio,Locutor *locutorAModificar){
 
+        int op=0;
         do{
         system("cls");
         textcolor(WHITE);
@@ -148,101 +199,163 @@ int buscarLocutor(Locutor *locutorAModificar){
                     int cedula;
                     printf("Ingresar Cedula: \n");
                     scanf("%i",&cedula);
-                    while(fread(locutorAModificar,sizeof(Locutor),1,file)){
+                    //Para recorrer la lista
+                    locutorAModificar=estacion_de_radio->lista_de_locutores;
+                    while(locutorAModificar){
                         if(locutorAModificar->persona_locutor.cedula==cedula){
-                            fclose(file);
-                            return 1;
+                            return locutorAModificar;
                         }
+                        locutorAModificar=locutorAModificar->sig;
                     }
                     printf("No hay ningun Locutor registrado con esa Cedula\n");
+                    pausar();
+                    return 0;
                     break;
-            case 3:     system("cls");
-                        char nombre[30];
-                        printf("Ingresar Nombre: \n");
-                        fflush(stdin);
-                        gets(nombre);
-                        printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
-                        int i=1, encontrado=0;
-                        while(fread(locutorAModificar,sizeof(Locutor),1,file)){
-                            if(strcmpi(locutorAModificar->persona_locutor.nombre,nombre)==0){
-                               printf("[%i] %-6s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n",i," ",locutorAModificar->empleado_locutor.id,
-                                locutorAModificar->persona_locutor.nombre,
-                                locutorAModificar->persona_locutor.apellido,
-                                locutorAModificar->persona_locutor.cedula,
-                                locutorAModificar->persona_locutor.edad,
-                                locutorAModificar->empleado_locutor.sueldo,
-                                "Nombre del programa");
-                                i++;
-                                encontrado=1;
+
+            case 3: system("cls");
+                    char nombre[30];
+                    printf("Ingresar Nombre: \n");
+                    fflush(stdin);
+                    gets(nombre);
+                    printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
+                    int i=1, encontrado=0;
+                    locutorAModificar=estacion_de_radio->lista_de_locutores;
+                    while(locutorAModificar){
+                        if(strcmpi(locutorAModificar->persona_locutor.nombre,nombre)==0){
+                            printf("[%i] %-6s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n",i," ",locutorAModificar->empleado_locutor.id,
+                            locutorAModificar->persona_locutor.nombre,
+                            locutorAModificar->persona_locutor.apellido,
+                            locutorAModificar->persona_locutor.cedula,
+                            locutorAModificar->persona_locutor.edad,
+                            locutorAModificar->empleado_locutor.sueldo,
+                            "Nombre del programa");
+                            i++;
+                            encontrado=1;
                             }
+                            locutorAModificar=locutorAModificar->sig;
                         }
 
-                      if(encontrado){
-                          do{
-                          textcolor(YELLOW);
-                          printf("Ingrese el locutor a elegir: "); textcolor(WHITE);scanf("%i", &op);
+                    if(encontrado){
+                        do{
+                            textcolor(YELLOW);
+                            printf("Ingrese el locutor a elegir: "); textcolor(WHITE);scanf("%i", &op);
                           }while(op>=i || op<0);
-                          rewind(file);
-                          while(fread(locutorAModificar,sizeof(Locutor),1,file)){
-                              if(strcmpi(locutorAModificar->persona_locutor.nombre,nombre)==0)
-                                  --op;
-                              if(op==0){
-                                fclose(file);
-                                return 1;
+                        locutorAModificar=estacion_de_radio->lista_de_locutores;
+                        while(locutorAModificar){
+                            if(strcmpi(locutorAModificar->persona_locutor.nombre,nombre)==0)
+                                --op;
+                            if(op==0){
+                                pausar();
+                                return locutorAModificar;
                               }
+                            locutorAModificar=locutorAModificar->sig;
                           }
                       }
-                      fclose(file);
-                      pausar();
-                      return 1;
-                      printf("No hay ningun Locutor registrado con ese Nombre\n");
-                      break;
+                    printf("No hay ningun Locutor registrado con ese Nombre\n");
+                    pausar();
+                    return 0;
+                    break;
             default : mensajePorDefecto(); break;
         }
-        pausar();
-        fclose(file);
-        return NULL;
         }while(op!=3);
-
-    }
 
 }
 
-void modificarRegistroLocutor(Radio * estacion_de_radio){
-    Locutor locutorAModificar;
-    FILE *file;
-    if(buscarLocutor(&locutorAModificar)){
-        int op=0;
-        do{
-            system("cls");
-            textcolor(WHITE);
-            printf("[1] Modificar sueldo base\n");
-            printf("[2] Despedir Locutor\n");
-            printf("[3] Cancelar\n");
-            textcolor(YELLOW);
-            printf("Ingrese la opcion: ");
-            textcolor(WHITE);scanf("%i",&op);
-
-            switch(op){
-                case 1:
-                        file=fopen(ARCHIVO_LOCUTORES,"r+b");
-                        if(!file){
-                         errorCritico();
-                        }else{
-                            system("cls");
-                            printf("Ingrese el nuevo sueldo para el locutor %s:",locutorAModificar.persona_locutor.nombre);
-                            scanf("%i",&locutorAModificar.empleado_locutor.sueldo);
-                            fseek(file,(sizeof(Locutor)*(locutorAModificar.empleado_locutor.id))-sizeof(Locutor),0);
-                                fwrite(&locutorAModificar,sizeof(Locutor),1,file);
-                            printf("Locutor Modificado..\n");
-                            fclose(file);
-                            getch(); controlDeUsuarios(estacion_de_radio); break;
-                        }
-                case 3: menu(estacion_de_radio); break;
-                default : mensajePorDefecto(); break;
-            }
-        }while(op!=3);
+static Locutor * eliminarLocutor(Radio *estacion_de_radio, Locutor *locutorAModificar)
+{
+    Locutor *nodoAnterior, *cabezaAuxiliar=estacion_de_radio->lista_de_locutores;
+    while(cabezaAuxiliar){
+            //SI ALGUN LOCUTOR TIENE REGISTRADA ESA CEDULA QUE SALGA DEL BUCLE
+        if(cabezaAuxiliar->persona_locutor.cedula==locutorAModificar->persona_locutor.cedula)
+            break;
+        //LOCUTOR ANTERIOR
+        nodoAnterior=cabezaAuxiliar;
+        //PARA RECORRER LA LISTA SE DIRECCIONA LA CABEZA AUXILIAR AL PROXIMO LOCUTOR DE LA LISTA
+        cabezaAuxiliar=cabezaAuxiliar->sig;
     }
+    //SI EXISTE EL LOCUTOR CON LA CEDULA
+    if(cabezaAuxiliar){
+        //SI ES EL PRIMER LOCUTOR
+        if(cabezaAuxiliar==estacion_de_radio->lista_de_locutores)
+           estacion_de_radio->lista_de_locutores=cabezaAuxiliar->sig;
+
+        else{
+            nodoAnterior->sig=cabezaAuxiliar->sig;
+            free(cabezaAuxiliar);
+        }
+        printf("Locutor despedido\n");
+    }
+    return estacion_de_radio->lista_de_locutores;
+}
+
+static void modificarRegistroLocutor(Radio * estacion_de_radio){
+    system("cls");
+    if(estacion_de_radio->lista_de_locutores){
+            Locutor *locutorAModificar;
+            locutorAModificar=(Locutor*)malloc(sizeof(Locutor));
+            locutorAModificar->sig=NULL;
+        //FUNCION DE  BUSQUEDA DEL LOCUTOR A PROCESAR
+        if(locutorAModificar=buscarLocutor(estacion_de_radio,locutorAModificar)){
+            int op=0;
+            system("cls");
+            do{
+                //OPCIONES DE MODIFICACIÓN DEL LOCUTOR
+                textcolor(WHITE);
+                printf("[1] Modificar sueldo base\n");
+                printf("[2] Despedir Locutor\n");
+                printf("[3] Cancelar\n");
+                textcolor(YELLOW);
+                printf("Ingrese la opcion: ");
+                textcolor(WHITE);scanf("%i",&op);
+                FILE *file;
+                switch(op){
+                   //MODIFICAR EL SUELDO BASE DEL LOCUTOR
+                    case 1:
+                            file=fopen(ARCHIVO_LOCUTORES,"r+b");
+                            if(!file){
+                             errorCritico();
+                            }else{
+                                system("cls");
+                                printf("Ingrese el nuevo sueldo para el locutor %s:",locutorAModificar->persona_locutor.nombre);
+                                scanf("%i",&locutorAModificar->empleado_locutor.sueldo);
+                                fseek(file,(sizeof(Locutor)*(locutorAModificar->empleado_locutor.id))-sizeof(Locutor),0);
+                                    fwrite(locutorAModificar,sizeof(Locutor),1,file);
+                                printf("Locutor Modificado..\n");
+                                fclose(file);
+                                getch(); controlDeUsuarios(estacion_de_radio); break;
+                            }
+                    //DESPEDIR LOCUTOR
+                    case 2: //SE ABRE EN MODO W PARA QUE SOBREESCRIBA
+                            file=fopen(ARCHIVO_LOCUTORES,"w");
+                            if(!file){
+                             errorCritico();
+                            }else{
+                                system("cls");
+                                estacion_de_radio->lista_de_locutores=eliminarLocutor(estacion_de_radio,locutorAModificar);
+                                Locutor *aux=estacion_de_radio->lista_de_locutores;
+                                int id=1;
+                                rewind(file);
+                                while(aux){
+                                    aux->empleado_locutor.id=id;
+                                    fwrite(aux,sizeof(Locutor),1,file);
+                                    id++;
+                                    aux=aux->sig;
+                                }
+                                printf("Locutor Modificado..\n");
+                                fclose(file);
+                                pausar(); controlDeUsuarios(estacion_de_radio); break;
+                            }
+                    //REGRESAR AL MENU PRINCIPAL
+                    case 3: menu(estacion_de_radio); break;
+                    default : mensajePorDefecto(); break;
+                }
+            }while(op!=3);
+        }
+    }else{
+        printf("No hay registros en el archivo");
+        pausar();
+    }
+
 }
 
 void registroSecretaria(Radio *estacion_de_radio){
@@ -309,6 +422,28 @@ void mostrarListaDeLocutores(){
     getch();
 }
 
+//MOSTRAR LISTA ENLAZADA
+void mostrarListaDeLocutores2(Radio *estacion_de_radio){
+	Locutor *listaAuxiliar;
+
+	listaAuxiliar=estacion_de_radio->lista_de_locutores;
+	system("cls");
+	printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
+	while(listaAuxiliar){
+		printf("%-10s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n"," ",listaAuxiliar->empleado_locutor.id,
+	    listaAuxiliar->persona_locutor.nombre,
+	    listaAuxiliar->persona_locutor.apellido,
+	    listaAuxiliar->persona_locutor.cedula,
+	    listaAuxiliar->persona_locutor.edad,
+	    listaAuxiliar->empleado_locutor.sueldo,
+	    "Nombre del programa");
+		listaAuxiliar=listaAuxiliar->sig;
+	}
+	printf("\n");
+	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
+    getch();
+}
+
 void mostrarListaDeSecretarias(){
 	system("cls");
 	FILE *file;
@@ -339,44 +474,3 @@ void eliminarListaLocutor(Radio * estacion_de_radio){
 	}
 }
 
-
-/*void eliminarLocutor(Radio estacion_de_radio)
-{
-    int cedula;
-    system("cls");
-    Locutor *cabezaAuxiliar, *nodoAnterior;
-    //SE SOLICITA LA CEDULA DEL LOCUTOR A ELIMINAR
-    printf("Introduzca la cedula del locutor a eliminar \n");
-    scanf("%i",&cedula);
-    //SE USA UNA CABEZA DE LISTA AUXILIAR PARA RECORRER LA LISTA Y SE INICIALIZA EN LA LISTA A RECORRER
-    cabezaAuxiliar=estacion_de_radio.lista_de_locutores;
-    while(cabezaAuxiliar){
-            //SI ALGUN LOCUTOR TIENE REGISTRADA ESA CEDULA QUE SALGA DEL BUCLE
-        if(cabezaAuxiliar->persona_locutor.cedula==cedula)
-            break;
-        //LOCUTOR ANTERIOR
-        nodoAnterior=cabezaAuxiliar;
-        //PARA RECORRER LA LISTA SE DIRECCIONA LA CABEZA AUXILIAR AL PROXIMO LOCUTOR DE LA LISTA
-        cabezaAuxiliar=cabezaAuxiliar->sig;
-    }
-    //SI EXISTE EL LOCUTOR CON LA CEDULA
-    if(cabezaAuxiliar){
-        //SI ES EL PRIMER LOCUTOR
-        if(cabezaAuxiliar==estacion_de_radio.lista_de_locutores)
-           estacion_de_radio.lista_de_locutores=cabezaAuxiliar->sig;
-
-        else{
-            nodoAnterior->sig=cabezaAuxiliar->sig;
-            free(cabezaAuxiliar);
-        }
-        printf("Locutor despedido\n");
-    }
-    else{
-        printf("Lo siento no se ha encontrado un locutor registrado con esa cedula\n");
-    }
-
-    printf("PRESIONA CUALQUIER TECLA PARA VOLVER...",224);
-    getch();
-    controlDeUsuarios(estacion_de_radio);
-}
-*/
