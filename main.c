@@ -6,22 +6,22 @@
 
 
 void menu (Radio *estacion_de_radio);
-void controlDeUsuarios(Radio *estacion_de_radio);
 
 int main ()
 {
     //INSTANCIAR RADIO QUE CONTIENE TODAS LAS ESTRUCTURAS
 	Radio mi_estacion_de_radio;
-	//CARGAR LA LISTA CON LOS REGISTROS DEL ARCHIVO
+	//CARGAR LA LISTA CON LOS REGISTROS DEL ARCHIVO DE LOCUTOR
 	iniciarListas(&mi_estacion_de_radio);
 	cargarListaLocutores(&mi_estacion_de_radio);
+	//MENU PRINCIPAL
 	menu(&mi_estacion_de_radio);
 	return 0;
 }
 
 // MENU
 void menu (Radio *estacion_de_radio){
-    int op;
+    char op;
 
     do{
     system("cls");
@@ -33,18 +33,18 @@ void menu (Radio *estacion_de_radio){
     printf("[5] Salir \n");
     textcolor(YELLOW);
     printf("Ingrese la opcion: ");
-    textcolor(WHITE);scanf("%i",&op);
+    textcolor(WHITE);fflush(stdin);op=getchar();
 
     switch(op){
-        case 1: break;
-        case 2: controlDeUsuarios(estacion_de_radio); break;
-        case 3: break;
-        case 4: break;
-        case 5: eliminarListaLocutor(estacion_de_radio);
+        case 49: break;
+        case 50: controlDeUsuarios(estacion_de_radio); break;
+        case 51: break;
+        case 52: break;
+        case 53: eliminarListaLocutor(estacion_de_radio);
 				free(estacion_de_radio->lista_de_locutores);
         		exit(1);
         default : mensajePorDefecto();
     }
-    }while(op!=5);
+    }while(op!=53);
 }
 

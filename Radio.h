@@ -8,8 +8,8 @@
 #include <windows.h>
 #define ARCHIVO_LOCUTORES "Registros/Locutores/Locutores.bin"
 #define ARCHIVO_SECRETARIAS "Registros/Secretarias/Secretarias.bin"
-#define MAX_NOMBRE 30
-#define MAX_APELLIDO 50
+#define MAX_NOMBRE 20
+#define MAX_APELLIDO 20
 
 typedef struct persona
 {
@@ -72,6 +72,7 @@ void errorCritico();
 //MENU DE CONTROL DE USUARIO
 void controlDeUsuarios(Radio *estacion_de_radio);
 //INICIAR LAS LISTAS DE LA RADIO
+static void recorrerLista(void * nodo);
 void iniciarListas(Radio *estacion_de_radio);
 void cargarListaLocutores(Radio *estacion_de_radio);
 //GUARDAR REGISTROS DE LOS ARCHIVOS
@@ -80,6 +81,10 @@ static void guardarSecretaria(Secretaria *nuevaSecretaria);
 //INGRESOS EN LA LISTA
 static void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor);
 static void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nuevaSecretaria);
+//VALIDACIONES DE LOS REGISTROS
+static int validarNombre(char nombre[]);
+static int validarCedula(Radio *estacion_de_radio, int cedula);
+static int validarEdad(int edad);
 //REGISTROS
 void registroLocutor(Radio *estacion_de_radio);
 void registroSecretaria(Radio *estacion_de_radio);

@@ -23,38 +23,46 @@ void mensajePorDefecto()
 
 //INICIALIZAR LA LISTA
 void iniciarListas(Radio *estacion_de_radio){
+    //SE INICIAN TODAS LAS LISTAS DE LA ESTACIÓN DE RADIO
 	estacion_de_radio->lista_de_locutores=NULL;
 	estacion_de_radio->lista_de_secretarias=NULL;
 }
 
 void cargarListaLocutores(Radio *estacion_de_radio){
-	//INICIO LA LISTA DE LOCUTORES EN NULL
 	system("cls");
-	//TRATO DE LEER EL ARCHIVO PARA CARGAR LAS LISTAS
+	//CREAR ARCHIVO O ABRIR PARA LA LECTURA
 	FILE *file;
-	file=fopen(ARCHIVO_LOCUTORES,"rb+");
+	file=fopen(ARCHIVO_LOCUTORES,"r");
 	//SI NO SE PUDO LEER ES PORQUE NO EXISTE
 	 if(!file){
 	 	system("cls");
 		printf("El archivo esta vacio\n");
 		pausar();
 	 }else{
+	    //LOCUTOR GENERAL QUE SE USARA PARA LEER CADA LOCUTOR QUE HAY EN EL ARCHIVO
 	 	Locutor *locutorALeer;
+	 	//REBOBINAR ARCHIVO
 	 	rewind(file);
+	 	//RESERVAR MEMORIA PARA LA PRIMERA VEZ QUE USARÁ EL LOCUTOR GENERAL
         locutorALeer=(Locutor*)malloc(sizeof(Locutor));
 
-	 //DE OTRA MANERA MIENTRAS VAYA LEYENDO EL LOCUTOR QUE LO VAYA INGRENSANDO EN LA LISTA
+	 //MIENTRAS VAYA LEYENDO EL LOCUTOR QUE LO VAYA INGRENSANDO EN LA LISTA
         while(fread(locutorALeer, sizeof(Locutor),1, file)){
+            //SE INGRESA EL LOCUTOR A LA LISTA DE LOCUTORES DE LA RADIO
 	        ingresarLocutorALaLista(estacion_de_radio,locutorALeer);
+            //SE ASIGNA OTRO ESPACIO DE MEMORIA PARA EL SIGUIENTE LOCUTOR
             locutorALeer=(Locutor*)malloc(sizeof(Locutor));
         }
+        //QUE SE LIBERE EL ESPACIO CREADO POR EL LOCUTR
+        free(locutorALeer);
 	 }
+	 //AL TERMINAR EL PROCESO QUE SE CIERRE EL ARCHIVO
 	 fclose(file);
 }
 
 void controlDeUsuarios(Radio *estacion_de_radio)
 {
-    int op;
+    char op;
     do{
     system("cls");
     textcolor(WHITE);
@@ -68,20 +76,20 @@ void controlDeUsuarios(Radio *estacion_de_radio)
     printf("[8] Menu principal \n");
     textcolor(YELLOW);
     printf("Ingrese la opcion:");
-    textcolor(WHITE);scanf("%i",&op);
+    textcolor(WHITE);fflush(stdin); op=getchar();
 
     switch(op){
-        case 1: registroLocutor(estacion_de_radio); break;
-        case 2: registroSecretaria(estacion_de_radio);break;
-        case 3: modificarRegistroLocutor(estacion_de_radio); break;
-        case 4: mostrarListaDeLocutores2(estacion_de_radio); break;
-        case 5: mostrarListaDeLocutores(); break;
-        case 6: mostrarListaDeSecretarias();break;
-        case 7: break;
-        case 8: menu(estacion_de_radio); break;
+        case 49: registroLocutor(estacion_de_radio); break;
+        case 50: registroSecretaria(estacion_de_radio);break;
+        case 51: modificarRegistroLocutor(estacion_de_radio); break;
+        case 52: mostrarListaDeLocutores2(estacion_de_radio); break;
+        case 53: mostrarListaDeLocutores(); break;
+        case 54: mostrarListaDeSecretarias();break;
+        case 55: break;
+        case 56: menu(estacion_de_radio); break;
         default : mensajePorDefecto();
     }
-    }while(op!=8);
+    }while(op!=56);
 
 }
 
@@ -110,14 +118,18 @@ static void guardarSecretaria(Secretaria *nuevaSecretaria){
 }
 
 static void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor){
+    //EL NUEVO NODO LOCUTOR SU SIGUIENTE APUNTARA A NULL PARA LOS ENLACES
+    nuevoLocutor->sig=NULL;
+    //SI LA LISTA ESTA VACIA EL NUEVO LOCUTOR SERA EL PRIMER NODO EN LA LISTA
 	if(!estacion_de_radio->lista_de_locutores){
 		estacion_de_radio->lista_de_locutores=nuevoLocutor;
-	}
+	} // SI LA LISTA YA TIENE ELEMENTOS SE CORRERA HASTA LLEGAR AL FINAL PARA HACER EL ENLACE
 	else{
 		Locutor *listaAuxiliar;
 		listaAuxiliar=estacion_de_radio->lista_de_locutores;
 		while(listaAuxiliar->sig)
 			listaAuxiliar=listaAuxiliar->sig;
+		//SE HACE EL ENLACE CON EL ULTIMO NODO DE LA LISTA
 		listaAuxiliar->sig=nuevoLocutor;
 
 	}
@@ -137,6 +149,63 @@ static void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nue
 	}
 }
 
+static int validarNombre(char nombre[]){
+    //EL NOMBRE NO PUEDE TENER ESPACIOS
+    //NO PUEDE TENER MAS DE 20 LETRAS
+    //NO PUEDE TENER MAS DE UNA MAYUSCULA Y POR DEFECTO QUE SEA LA PRIMERA
+    int i=0;
+    while(nombre[i]!='\0'){
+        if(nombre[i]==' ')
+            return 0;
+        i++;
+    }
+    if(strlen(nombre)>20)
+        return 0;
+    i=1;
+    while(nombre[i]!='\0'){
+        if(nombre[i]==toupper(nombre[i]))
+            return 0;
+        i++;
+    }
+    return 1;
+
+}
+
+static int validarCedula(Radio *estacion_de_radio, int cedula){
+    Locutor * listaAuxiliar=estacion_de_radio->lista_de_locutores;
+    Secretaria *listaAuxiliarS=estacion_de_radio->lista_de_secretarias;
+    while(listaAuxiliar){
+        if(listaAuxiliar->persona_locutor.cedula==cedula)
+            return 0;
+        listaAuxiliar=listaAuxiliar->sig;
+    }
+    while(listaAuxiliarS){
+        if(listaAuxiliarS->persona_secretaria.cedula==cedula)
+            return 0;
+        listaAuxiliarS=listaAuxiliarS->sig;
+    }
+    if(cedula<9000000 || cedula>40000000)
+        return 0;
+    return 1;
+}
+
+static int validarEdad(int edad){
+    if(edad<18)
+        return 0;
+    else if(edad>80)
+        return 0;
+
+    return 1;
+}
+
+static int validarSueldo(int sueldo){
+        if(sueldo>50000)
+            return 0;
+        else if(sueldo<0)
+            return 0;
+    return 1;
+}
+
 void registroLocutor(Radio *estacion_de_radio){
 	system("cls");
 
@@ -148,35 +217,83 @@ void registroLocutor(Radio *estacion_de_radio){
     }
     else{
     	FILE * file=fopen(ARCHIVO_LOCUTORES,"rb");
-	    int id=0;
+	    int id=0, valido=0;
 
 	    fseek(file,(sizeof(Locutor)*(-1)),SEEK_END);
 	    if(fread(nuevoLocutor,sizeof(Locutor),1,file))
 	    	id=nuevoLocutor->empleado_locutor.id;
-
-	    printf("Ingrese el nombre del nuevo locutor: \n");
+        do{
+        textcolor(WHITE);
+	    printf("Ingrese el nombre del nuevo locutor:                                  \n");
 	    fflush(stdin);
 	    gets(nuevoLocutor->persona_locutor.nombre);
+	    valido=validarNombre(nuevoLocutor->persona_locutor.nombre);
+            if(!valido){
+                textcolor(RED);
+                printf("El nombre no puede tener espacios o ser mas largo de 20 letras\n");
+                Sleep(2000);
+                system("cls");
+            }
+        }while(!valido);
 
-	    printf("Ingrese el apellido del nuevo locutor: \n");
+	     do{
+        textcolor(WHITE);
+	    printf("Ingrese el Apellido del nuevo locutor:                                  \n");
 	    fflush(stdin);
 	    gets(nuevoLocutor->persona_locutor.apellido);
+	    valido=validarNombre(nuevoLocutor->persona_locutor.apellido);
+            if(!valido){
+                textcolor(RED);
+                printf("El Apellido no puede tener espacios o ser mas largo de 20 letras\r");
+                Sleep(2000);
+            }
+        }while(!valido);
 
-	    printf("Ingrese la cedula del locutor \n");
-	    scanf("%i",&nuevoLocutor->persona_locutor.cedula);
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese la cedula del locutor                                \n");
+            scanf("%i",&nuevoLocutor->persona_locutor.cedula);
+            valido=validarCedula(estacion_de_radio,nuevoLocutor->persona_locutor.cedula);
+            if(!valido){
+                textcolor(RED);
+                printf("La cedula que ingreso es incorrecta o ya esta registrada \r");
+                Sleep(2000);
+            }
+	    }while(!valido);
 
-	    printf("Ingrese la edad del nuevo locutor: \n");
-	    scanf("%i",&nuevoLocutor->persona_locutor.edad);
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese la edad del locutor                                \n");
+            scanf("%i",&nuevoLocutor->persona_locutor.edad);
+            valido=validarEdad(nuevoLocutor->persona_locutor.edad);
+            if(!valido){
+                textcolor(RED);
+                printf("La edad valida tiene que estar entre 18 y 80 a%cos \r",164);
+                Sleep(2000);
+            }
+	    }while(!valido);
 
-	    printf("Ingrese el sueldo del nuevo locutor: \n");
-	    scanf("%i",&nuevoLocutor->empleado_locutor.sueldo);
-	    id++;
-		nuevoLocutor->empleado_locutor.id=id;
-		nuevoLocutor->empleado_locutor.activo=1;
-		nuevoLocutor->sig=NULL;
-		fclose(file);
-	    ingresarLocutorALaLista(estacion_de_radio,nuevoLocutor);
-	    guardarLocutor(nuevoLocutor);
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese el sueldo del locutor                                \n");
+            scanf("%i",&nuevoLocutor->empleado_locutor.sueldo);
+            valido=validarSueldo(nuevoLocutor->empleado_locutor.sueldo);
+            if(!valido){
+                textcolor(RED);
+                printf("El sueldo tiene que estar entre el presupuesto \r");
+                Sleep(2000);
+            }
+	    }while(!valido);
+
+	    if(valido){
+            id++;
+            nuevoLocutor->empleado_locutor.id=id;
+            nuevoLocutor->empleado_locutor.activo=1;
+            nuevoLocutor->sig=NULL;
+            fclose(file);
+            ingresarLocutorALaLista(estacion_de_radio,nuevoLocutor);
+            guardarLocutor(nuevoLocutor);
+	    }
     }
 }
 
@@ -369,35 +486,84 @@ void registroSecretaria(Radio *estacion_de_radio){
     }
     else{
     	FILE * file=fopen(ARCHIVO_SECRETARIAS,"rb");
-	    int id=0;
+	    int id=0,valido=0;
 
 	    fseek(file,(sizeof(Secretaria)*(-1)),SEEK_END);
 	    if(fread(nuevaSecretaria,sizeof(Secretaria),1,file))
 	    	id=nuevaSecretaria->empleado_secretaria.id;
 
-	    printf("Ingrese el nombre del nueva Secretaria: \n");
+	    do{
+        textcolor(WHITE);
+	    printf("Ingrese el nombre de la nueva secretaria:                                  \n");
 	    fflush(stdin);
 	    gets(nuevaSecretaria->persona_secretaria.nombre);
+	    valido=validarNombre(nuevaSecretaria->persona_secretaria.nombre);
+            if(!valido){
+                textcolor(RED);
+                printf("El nombre no puede tener espacios o ser mas largo de 20 letras\n");
+                Sleep(2000);
+                system("cls");
+            }
+        }while(!valido);
 
-	    printf("Ingrese el apellido del nueva Secretaria: \n");
+	     do{
+        textcolor(WHITE);
+	    printf("Ingrese el apellido del nueva secretaria:                                  \n");
 	    fflush(stdin);
 	    gets(nuevaSecretaria->persona_secretaria.apellido);
+	    valido=validarNombre(nuevaSecretaria->persona_secretaria.apellido);
+            if(!valido){
+                textcolor(RED);
+                printf("El apellido no puede tener espacios o ser mas largo de 20 letras\r");
+                Sleep(2000);
+            }
+        }while(!valido);
 
-	    printf("Ingrese la cedula del Secretaria \n");
-	    scanf("%i",&nuevaSecretaria->persona_secretaria.cedula);
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese la cedula de la secretaria                                \n");
+            scanf("%i",&nuevaSecretaria->persona_secretaria.cedula);
+            valido=validarCedula(estacion_de_radio,nuevaSecretaria->persona_secretaria.cedula);
+            if(!valido){
+                textcolor(RED);
+                printf("La cedula que ingreso es incorrecta o ya esta registrada \r");
+                Sleep(2000);
+            }
+	    }while(!valido);
 
-	    printf("Ingrese la edad del nueva Secretaria: \n");
-	    scanf("%i",&nuevaSecretaria->persona_secretaria.edad);
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese la edad de la secretaria                                \n");
+            scanf("%i",&nuevaSecretaria->persona_secretaria.edad);
+            valido=validarEdad(nuevaSecretaria->persona_secretaria.edad);
+            if(!valido){
+                textcolor(RED);
+                printf("La edad valida tiene que estar entre 18 y 80 a%cos \r",164);
+                Sleep(2000);
+            }
+	    }while(!valido);
 
-	    printf("Ingrese el sueldo del nueva Secretaria: \n");
-	    scanf("%i",&nuevaSecretaria->empleado_secretaria.sueldo);
-	    id++;
-		nuevaSecretaria->empleado_secretaria.id=id;
-		nuevaSecretaria->empleado_secretaria.activo=1;
-		nuevaSecretaria->sig=NULL;
-		fclose(file);
-	    ingresarSecretariaALaLista(estacion_de_radio,nuevaSecretaria);
-	    guardarSecretaria(nuevaSecretaria);
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese el sueldo de la secretaria                                \n");
+            scanf("%i",&nuevaSecretaria->empleado_secretaria.sueldo);
+            valido=validarSueldo(nuevaSecretaria->empleado_secretaria.sueldo);
+            if(!valido){
+                textcolor(RED);
+                printf("El sueldo tiene que estar entre el presupuesto \r");
+                Sleep(2000);
+            }
+	    }while(!valido);
+
+	    if(valido){
+            id++;
+            nuevaSecretaria->empleado_secretaria.id=id;
+            nuevaSecretaria->empleado_secretaria.activo=1;
+            nuevaSecretaria->sig=NULL;
+            fclose(file);
+            ingresarSecretariaALaLista(estacion_de_radio,nuevaSecretaria);
+            guardarSecretaria(nuevaSecretaria);
+	    }
     }
 }
 
@@ -443,7 +609,7 @@ void mostrarListaDeLocutores2(Radio *estacion_de_radio){
 	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
     getch();
 }
-
+//MOSTRAR LOS REGISTROS EN LOS ARCHIVOS
 void mostrarListaDeSecretarias(){
 	system("cls");
 	FILE *file;
@@ -464,7 +630,7 @@ void mostrarListaDeSecretarias(){
 	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
     getch();
 }
-
+//ELIMINAR CADA NODO DE LA LISTA
 void eliminarListaLocutor(Radio * estacion_de_radio){
 	Locutor *listaAuxiliar;
 	while(estacion_de_radio->lista_de_locutores){
