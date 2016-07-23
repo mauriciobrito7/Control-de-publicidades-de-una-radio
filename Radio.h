@@ -72,11 +72,11 @@ void errorCritico();
 //INICIAR LAS LISTAS DE LA RADIO
 void iniciarListas(Radio *estacion_de_radio);
 //GUARDAR REGISTROS DE LOS ARCHIVOS
-void guardarLocutor(Locutor *nuevoLocutor);
-void guardarSecretaria(Secretaria *nuevaSecretaria);
+static void guardarLocutor(Locutor *nuevoLocutor);
+static void guardarSecretaria(Secretaria *nuevaSecretaria);
 //INGRESOS EN LA LISTA
-void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor);
-void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nuevaSecretaria);
+static void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor);
+static void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nuevaSecretaria);
 //REGISTROS
 void registroLocutor(Radio *estacion_de_radio);
 void registroSecretaria(Radio *estacion_de_radio);

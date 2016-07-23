@@ -17,6 +17,7 @@ int main ()
 	iniciarListas(&mi_estacion_de_radio);
 	menu(&mi_estacion_de_radio);
 	pausar();
+	eliminarListaLocutor(mi_estacion_de_radio.lista_de_locutores);
 	return 0;
 }
 

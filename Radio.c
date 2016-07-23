@@ -28,7 +28,7 @@ void iniciarListas(Radio *estacion_de_radio){
 }
 
 
-void guardarLocutor(Locutor *nuevoLocutor){
+static void guardarLocutor(Locutor *nuevoLocutor){
 	FILE *file;
 
 	file=fopen(ARCHIVO_LOCUTORES,"ab");
@@ -40,7 +40,7 @@ void guardarLocutor(Locutor *nuevoLocutor){
 	fclose(file);
 }
 
-void guardarSecretaria(Secretaria *nuevaSecretaria){
+static void guardarSecretaria(Secretaria *nuevaSecretaria){
 	FILE *file;
 
 	file=fopen(ARCHIVO_SECRETARIAS,"ab");
@@ -52,7 +52,7 @@ void guardarSecretaria(Secretaria *nuevaSecretaria){
 	fclose(file);
 }
 
-void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor){
+static void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor){
 	if(!estacion_de_radio->lista_de_locutores){
 		estacion_de_radio->lista_de_locutores=nuevoLocutor;
 	}
@@ -66,7 +66,7 @@ void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor){
 	}
 }
 
-void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nuevaSecretaria){
+static void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nuevaSecretaria){
 	if(!estacion_de_radio->lista_de_secretarias){
 		estacion_de_radio->lista_de_secretarias=nuevaSecretaria;
 	}
@@ -136,7 +136,8 @@ int buscarLocutor(Locutor *locutorAModificar){
         system("cls");
         textcolor(WHITE);
         printf("[1] Buscar por ID\n");
-        printf("[2] Buscar por cedula\n");
+        printf("[2] Buscar por Cedula\n");
+        printf("[3] Buscar por Nombre\n");
         textcolor(YELLOW);
         printf("Ingrese la opcion: ");
         textcolor(WHITE);scanf("%i",&op);
@@ -153,10 +154,51 @@ int buscarLocutor(Locutor *locutorAModificar){
                             return 1;
                         }
                     }
+                    printf("No hay ningun Locutor registrado con esa Cedula\n");
                     break;
+            case 3:     system("cls");
+                        char nombre[30];
+                        printf("Ingresar Nombre: \n");
+                        fflush(stdin);
+                        gets(nombre);
+                        printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
+                        int i=1, encontrado=0;
+                        while(fread(locutorAModificar,sizeof(Locutor),1,file)){
+                            if(strcmpi(locutorAModificar->persona_locutor.nombre,nombre)==0){
+                               printf("[%i] %-6s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n",i," ",locutorAModificar->empleado_locutor.id,
+                                locutorAModificar->persona_locutor.nombre,
+                                locutorAModificar->persona_locutor.apellido,
+                                locutorAModificar->persona_locutor.cedula,
+                                locutorAModificar->persona_locutor.edad,
+                                locutorAModificar->empleado_locutor.sueldo,
+                                "Nombre del programa");
+                                i++;
+                                encontrado=1;
+                            }
+                        }
+
+                      if(encontrado){
+                          do{
+                          textcolor(YELLOW);
+                          printf("Ingrese el locutor a elegir: "); textcolor(WHITE);scanf("%i", &op);
+                          }while(op>=i || op<0);
+                          rewind(file);
+                          while(fread(locutorAModificar,sizeof(Locutor),1,file)){
+                              if(strcmpi(locutorAModificar->persona_locutor.nombre,nombre)==0)
+                                  --op;
+                              if(op==0){
+                                fclose(file);
+                                return 1;
+                              }
+                          }
+                      }
+                      fclose(file);
+                      pausar();
+                      return 1;
+                      printf("No hay ningun Locutor registrado con ese Nombre\n");
+                      break;
             default : mensajePorDefecto(); break;
         }
-        printf("No hay ningun Locutor registrado con esa Cedula\n");
         pausar();
         fclose(file);
         return NULL;
@@ -176,6 +218,7 @@ void modificarRegistroLocutor(Radio * estacion_de_radio){
             textcolor(WHITE);
             printf("[1] Modificar sueldo base\n");
             printf("[2] Despedir Locutor\n");
+            printf("[3] Cancelar\n");
             textcolor(YELLOW);
             printf("Ingrese la opcion: ");
             textcolor(WHITE);scanf("%i",&op);
@@ -195,7 +238,7 @@ void modificarRegistroLocutor(Radio * estacion_de_radio){
                             fclose(file);
                             getch(); controlDeUsuarios(estacion_de_radio); break;
                         }
-                case 2: break;
+                case 3: menu(estacion_de_radio); break;
                 default : mensajePorDefecto(); break;
             }
         }while(op!=3);
@@ -286,8 +329,6 @@ void mostrarListaDeSecretarias(){
 	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
     getch();
 }
-
-
 
 void eliminarListaLocutor(Radio * estacion_de_radio){
 	Locutor *listaAuxiliar;
