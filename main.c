@@ -14,6 +14,7 @@ int main ()
 	//CARGAR LA LISTA CON LOS REGISTROS DEL ARCHIVO DE LOCUTOR
 	iniciarListas(&mi_estacion_de_radio);
 	cargarListaLocutores(&mi_estacion_de_radio);
+	cargarListaSecretarias(&mi_estacion_de_radio);
 	//MENU PRINCIPAL
 	menu(&mi_estacion_de_radio);
 	return 0;
@@ -41,7 +42,9 @@ void menu (Radio *estacion_de_radio){
         case 51: break;
         case 52: break;
         case 53: eliminarListaLocutor(estacion_de_radio);
+                 eliminarListaSecretarias(estacion_de_radio);
 				free(estacion_de_radio->lista_de_locutores);
+				free(estacion_de_radio->lista_de_secretarias);
         		exit(1);
         default : mensajePorDefecto();
     }

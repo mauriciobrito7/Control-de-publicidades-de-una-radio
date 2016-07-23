@@ -60,6 +60,38 @@ void cargarListaLocutores(Radio *estacion_de_radio){
 	 fclose(file);
 }
 
+void cargarListaSecretarias(Radio *estacion_de_radio){
+	system("cls");
+	//CREAR ARCHIVO O ABRIR PARA LA LECTURA
+	FILE *file;
+	file=fopen(ARCHIVO_SECRETARIAS,"r");
+	//SI NO SE PUDO LEER ES PORQUE NO EXISTE
+	 if(!file){
+	 	system("cls");
+		printf("El archivo esta vacio\n");
+		pausar();
+	 }else{
+	    // GENERAL QUE SE USARA PARA LEER CADA SECRETARIA QUE HAY EN EL ARCHIVO
+	 	Secretaria *secretariaALeer;
+	 	//REBOBINAR ARCHIVO
+	 	rewind(file);
+	 	//RESERVAR MEMORIA PARA LA PRIMERA VEZ QUE USARÁ LA SECRETARIA GENERAL
+        secretariaALeer=(Secretaria*)malloc(sizeof(Secretaria));
+
+	 //MIENTRAS VAYA LEYENDO LA SECRETARIA QUE LO VAYA INGRENSANDO EN LA LISTA
+        while(fread(secretariaALeer, sizeof(Secretaria),1, file)){
+            //SE INGRESA EL SECRETARIA A LA LISTA DE SECRETARIAS DE LA RADIO
+	        ingresarSecretariaALaLista(estacion_de_radio,secretariaALeer);
+            //SE ASIGNA OTRO ESPACIO DE MEMORIA PARA EL SIGUIENTE SECRETARIA
+            secretariaALeer=(Secretaria*)malloc(sizeof(Secretaria));
+        }
+        //QUE SE LIBERE EL ESPACIO CREADO POR LA SECRETARIA
+        free(secretariaALeer);
+	 }
+	 //AL TERMINAR EL PROCESO QUE SE CIERRE EL ARCHIVO
+	 fclose(file);
+}
+
 void controlDeUsuarios(Radio *estacion_de_radio)
 {
     char op;
@@ -82,7 +114,7 @@ void controlDeUsuarios(Radio *estacion_de_radio)
         case 49: registroLocutor(estacion_de_radio); break;
         case 50: registroSecretaria(estacion_de_radio);break;
         case 51: modificarRegistroLocutor(estacion_de_radio); break;
-        case 52: mostrarListaDeLocutores2(estacion_de_radio); break;
+        case 52:  break;
         case 53: mostrarListaDeLocutores(); break;
         case 54: mostrarListaDeSecretarias();break;
         case 55: break;
@@ -475,6 +507,76 @@ static void modificarRegistroLocutor(Radio * estacion_de_radio){
 
 }
 
+static void modificarRegistroLocutor(Radio * estacion_de_radio){
+    system("cls");
+    if(estacion_de_radio->lista_de_locutores){
+            Locutor *locutorAModificar;
+            locutorAModificar=(Locutor*)malloc(sizeof(Locutor));
+            locutorAModificar->sig=NULL;
+        //FUNCION DE  BUSQUEDA DEL LOCUTOR A PROCESAR
+        if(locutorAModificar=buscarLocutor(estacion_de_radio,locutorAModificar)){
+            int op=0;
+            system("cls");
+            do{
+                //OPCIONES DE MODIFICACIÓN DEL LOCUTOR
+                textcolor(WHITE);
+                printf("[1] Modificar sueldo base\n");
+                printf("[2] Despedir Locutor\n");
+                printf("[3] Cancelar\n");
+                textcolor(YELLOW);
+                printf("Ingrese la opcion: ");
+                textcolor(WHITE);scanf("%i",&op);
+                FILE *file;
+                switch(op){
+                   //MODIFICAR EL SUELDO BASE DEL LOCUTOR
+                    case 1:
+                            file=fopen(ARCHIVO_LOCUTORES,"r+b");
+                            if(!file){
+                             errorCritico();
+                            }else{
+                                system("cls");
+                                printf("Ingrese el nuevo sueldo para el locutor %s:",locutorAModificar->persona_locutor.nombre);
+                                scanf("%i",&locutorAModificar->empleado_locutor.sueldo);
+                                fseek(file,(sizeof(Locutor)*(locutorAModificar->empleado_locutor.id))-sizeof(Locutor),0);
+                                    fwrite(locutorAModificar,sizeof(Locutor),1,file);
+                                printf("Locutor Modificado..\n");
+                                fclose(file);
+                                getch(); controlDeUsuarios(estacion_de_radio); break;
+                            }
+                    //DESPEDIR LOCUTOR
+                    case 2: //SE ABRE EN MODO W PARA QUE SOBREESCRIBA
+                            file=fopen(ARCHIVO_LOCUTORES,"w");
+                            if(!file){
+                             errorCritico();
+                            }else{
+                                system("cls");
+                                estacion_de_radio->lista_de_locutores=eliminarLocutor(estacion_de_radio,locutorAModificar);
+                                Locutor *aux=estacion_de_radio->lista_de_locutores;
+                                int id=1;
+                                rewind(file);
+                                while(aux){
+                                    aux->empleado_locutor.id=id;
+                                    fwrite(aux,sizeof(Locutor),1,file);
+                                    id++;
+                                    aux=aux->sig;
+                                }
+                                printf("Locutor Modificado..\n");
+                                fclose(file);
+                                pausar(); controlDeUsuarios(estacion_de_radio); break;
+                            }
+                    //REGRESAR AL MENU PRINCIPAL
+                    case 3: menu(estacion_de_radio); break;
+                    default : mensajePorDefecto(); break;
+                }
+            }while(op!=3);
+        }
+    }else{
+        printf("No hay registros en el archivo");
+        pausar();
+    }
+
+}
+
 void registroSecretaria(Radio *estacion_de_radio){
 	system("cls");
 
@@ -587,8 +689,8 @@ void mostrarListaDeLocutores(){
 	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
     getch();
 }
+/*//MOSTRAR LISTA ENLAZADA
 
-//MOSTRAR LISTA ENLAZADA
 void mostrarListaDeLocutores2(Radio *estacion_de_radio){
 	Locutor *listaAuxiliar;
 
@@ -609,6 +711,7 @@ void mostrarListaDeLocutores2(Radio *estacion_de_radio){
 	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
     getch();
 }
+*/
 //MOSTRAR LOS REGISTROS EN LOS ARCHIVOS
 void mostrarListaDeSecretarias(){
 	system("cls");
@@ -640,3 +743,11 @@ void eliminarListaLocutor(Radio * estacion_de_radio){
 	}
 }
 
+void eliminarListaSecretarias(Radio * estacion_de_radio){
+	Secretaria *listaAuxiliar;
+	while(estacion_de_radio->lista_de_secretarias){
+		listaAuxiliar=estacion_de_radio->lista_de_secretarias;
+		estacion_de_radio->lista_de_secretarias=estacion_de_radio->lista_de_secretarias->sig;
+		free(listaAuxiliar);
+	}
+}
