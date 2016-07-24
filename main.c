@@ -26,6 +26,8 @@ void menu (Radio *estacion_de_radio){
 
     do{
     system("cls");
+    textcolor(LIGHTBLUE);
+    printf("--SYSTEMA DE GESTION DE LA RADIO--\n");
     textcolor(WHITE);
     printf("[1] Gestion de clientes para la publicidad \n");
     printf("[2] Gestion de usuarios de la radio\n");
@@ -34,7 +36,7 @@ void menu (Radio *estacion_de_radio){
     printf("[5] Salir \n");
     textcolor(YELLOW);
     printf("Ingrese la opcion: ");
-    textcolor(WHITE);fflush(stdin);op=getchar();
+    textcolor(WHITE);fflush(stdin);op=getche();
 
     switch(op){
         case 49: break;

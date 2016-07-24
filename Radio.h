@@ -95,8 +95,11 @@ void mostrarListaDeLocutores2(Radio *estacion_de_radio);
 void mostrarListaDeSecretarias();
 //MODIFICACIONES DE REGISTRO
 Locutor * buscarLocutor(Radio * estacion_de_radio,Locutor *locutorAModificar);
+Secretaria * buscarSecretaria(Radio * estacion_de_radio,Secretaria *secretariaAModificar);
 static void modificarRegistroLocutor(Radio * estacion_de_radio);
+static void modificarRegistroSecretaria(Radio * estacion_de_radio);
 static Locutor * eliminarLocutor(Radio *estacion_de_radio , Locutor *locutorAModificar);
+static Secretaria * eliminarSecretaria(Radio *estacion_de_radio, Secretaria *secretariaAModificar);
 
 void eliminarListaLocutor(Radio * estacion_de_radio);
 void eliminarListaSecretarias(Radio * estacion_de_radio);
