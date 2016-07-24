@@ -8,14 +8,14 @@
 #include <windows.h>
 #define ARCHIVO_LOCUTORES "Registros/Locutores/Locutores.bin"
 #define ARCHIVO_SECRETARIAS "Registros/Secretarias/Secretarias.bin"
+#define ARCHIVO_CLIENTES "Registros/Clientes/Clientes.bin"
 #define MAX_NOMBRE 20
-#define MAX_APELLIDO 20
 
 typedef struct persona
 {
     int edad;
     char nombre[MAX_NOMBRE];
-    char apellido[MAX_APELLIDO];
+    char apellido[MAX_NOMBRE];
     int cedula;
 }Persona;
 
@@ -36,13 +36,18 @@ typedef struct locutor{
 typedef struct secretaria{
     Persona persona_secretaria;
     Empleado empleado_secretaria;
-    //char *password;
+    char password[12];
     struct secretaria *sig;
     //Agregar_registro_de_locutor;
     //Agregar_registro_de_cliente;
     //Eliminar_registro_de_locutor;
     //Eliminar_registro_de_cliente;
 }Secretaria;
+
+typedef struct cliente{
+    Persona persona_cliente;
+
+}Cliente;
 
 typedef struct programas{
     char *Nombre_de_programa;
@@ -103,5 +108,6 @@ static Secretaria * eliminarSecretaria(Radio *estacion_de_radio, Secretaria *sec
 
 void eliminarListaLocutor(Radio * estacion_de_radio);
 void eliminarListaSecretarias(Radio * estacion_de_radio);
+static void salirDelPrograma(Radio *estacion_de_radio);
 
 #endif
