@@ -13,6 +13,8 @@ int main ()
 	Radio mi_estacion_de_radio;
 	//CARGAR LA LISTA CON LOS REGISTROS DEL ARCHIVO DE LOCUTOR
 	iniciarListas(&mi_estacion_de_radio);
+	cargarListaClientes(&mi_estacion_de_radio);
+	cargarListaProgramas(&mi_estacion_de_radio);
 	cargarListaLocutores(&mi_estacion_de_radio);
 	cargarListaSecretarias(&mi_estacion_de_radio);
 	//MENU PRINCIPAL
@@ -39,15 +41,20 @@ void menu (Radio *estacion_de_radio){
     textcolor(WHITE);fflush(stdin);op=getche();
 
     switch(op){
-        case 49: break;
+        case 49: controlDeClientes(estacion_de_radio); break;
         case 50: controlDeUsuarios(estacion_de_radio); break;
-        case 51: break;
+        case 51: controlDeProgramas(estacion_de_radio); break;
         case 52: break;
-        case 53: eliminarListaLocutor(estacion_de_radio);
+        case 53:
+                 eliminarListaClientes(estacion_de_radio);
+                 eliminarListaLocutor(estacion_de_radio);
                  eliminarListaSecretarias(estacion_de_radio);
-				free(estacion_de_radio->lista_de_locutores);
-				free(estacion_de_radio->lista_de_secretarias);
-        		exit(1);
+                 eliminarListaProgramas(estacion_de_radio);
+				 free(estacion_de_radio->lista_de_locutores);
+				 free(estacion_de_radio->lista_de_secretarias);
+				 free(estacion_de_radio->lista_de_clientes);
+				 free(estacion_de_radio->lista_de_programas);
+        		 exit(1);
         default : mensajePorDefecto();
     }
     }while(op!=53);

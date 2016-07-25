@@ -26,6 +26,40 @@ void iniciarListas(Radio *estacion_de_radio){
     //SE INICIAN TODAS LAS LISTAS DE LA ESTACIÓN DE RADIO
 	estacion_de_radio->lista_de_locutores=NULL;
 	estacion_de_radio->lista_de_secretarias=NULL;
+	estacion_de_radio->lista_de_clientes=NULL;
+	estacion_de_radio->lista_de_programas=NULL;
+}
+
+void cargarListaClientes(Radio *estacion_de_radio){
+	system("cls");
+	//CREAR ARCHIVO O ABRIR PARA LA LECTURA
+	FILE *file;
+	file=fopen(ARCHIVO_CLIENTES,"r");
+	//SI NO SE PUDO LEER ES PORQUE NO EXISTE
+	 if(!file){
+	 	system("cls");
+		printf("El archivo de los clientes esta vacio\n");
+		pausar();
+	 }else{
+	    //LOCUTOR GENERAL QUE SE USARA PARA LEER CADA LOCUTOR QUE HAY EN EL ARCHIVO
+	 	Cliente *clienteALeer;
+	 	//REBOBINAR ARCHIVO
+	 	rewind(file);
+	 	//RESERVAR MEMORIA PARA LA PRIMERA VEZ QUE USARÁ EL LOCUTOR GENERAL
+        clienteALeer=(Cliente*)malloc(sizeof(Cliente));
+
+	 //MIENTRAS VAYA LEYENDO EL LOCUTOR QUE LO VAYA INGRENSANDO EN LA LISTA
+        while(fread(clienteALeer, sizeof(Cliente),1, file)){
+            //SE INGRESA EL LOCUTOR A LA LISTA DE LOCUTORES DE LA RADIO
+	        ingresarClienteALaLista(estacion_de_radio,clienteALeer);
+            //SE ASIGNA OTRO ESPACIO DE MEMORIA PARA EL SIGUIENTE LOCUTOR
+            clienteALeer=(Cliente*)malloc(sizeof(Cliente));
+        }
+        //QUE SE LIBERE EL ESPACIO CREADO POR EL LOCUTR
+        free(clienteALeer);
+	 }
+	 //AL TERMINAR EL PROCESO QUE SE CIERRE EL ARCHIVO
+	 fclose(file);
 }
 
 void cargarListaLocutores(Radio *estacion_de_radio){
@@ -92,6 +126,65 @@ void cargarListaSecretarias(Radio *estacion_de_radio){
 	 fclose(file);
 }
 
+void cargarListaProgramas(Radio *estacion_de_radio){
+	system("cls");
+	//CREAR ARCHIVO O ABRIR PARA LA LECTURA
+	FILE *file;
+	file=fopen(ARCHIVO_PROGRAMAS,"r");
+	//SI NO SE PUDO LEER ES PORQUE NO EXISTE
+	 if(!file){
+	 	system("cls");
+		printf("El archivo de los programas esta vacio\n");
+		pausar();
+	 }else{
+	    // GENERAL QUE SE USARA PARA LEER CADA SECRETARIA QUE HAY EN EL ARCHIVO
+	 	Programa *programaALeer;
+	 	//REBOBINAR ARCHIVO
+	 	rewind(file);
+	 	//RESERVAR MEMORIA PARA LA PRIMERA VEZ QUE USARÁ LA SECRETARIA GENERAL
+        programaALeer=(Programa*)malloc(sizeof(Programa));
+
+	 //MIENTRAS VAYA LEYENDO LA SECRETARIA QUE LO VAYA INGRENSANDO EN LA LISTA
+        while(fread(programaALeer, sizeof(Programa),1, file)){
+            //SE INGRESA EL SECRETARIA A LA LISTA DE SECRETARIAS DE LA RADIO
+	        ingresarProgramaALaLista(estacion_de_radio,programaALeer);
+            //SE ASIGNA OTRO ESPACIO DE MEMORIA PARA EL SIGUIENTE SECRETARIA
+            programaALeer=(Programa*)malloc(sizeof(Programa));
+        }
+        //QUE SE LIBERE EL ESPACIO CREADO POR LA SECRETARIA
+        free(programaALeer);
+	 }
+	 //AL TERMINAR EL PROCESO QUE SE CIERRE EL ARCHIVO
+	 fclose(file);
+}
+
+void controlDeProgramas(Radio *estacion_de_radio){
+    char op;
+    do{
+        system("cls");
+        textcolor(LIGHTBLUE);
+        printf("--CONTROL DE PROGRAMAS--\n");
+        textcolor(WHITE);
+        printf("[1] Registrar de programa\n");
+        printf("[2] Modificar programa \n");
+        printf("[3] Mostrar listado de programas\n");
+        printf("[4] Menu principal \n");
+        printf("[5] Salir del programa \n");
+        textcolor(YELLOW);
+        printf("Ingrese la opcion:");
+        textcolor(WHITE);fflush(stdin); op=getche();
+
+        switch(op){
+            case 49: registroPrograma(estacion_de_radio); break;
+            case 50: break;
+            case 51: mostrarListaDeProgramas(); break;
+            case 52: menu(estacion_de_radio); break;
+            case 53: salirDelPrograma(estacion_de_radio); exit(1);
+            default : mensajePorDefecto();
+        }
+    }while(op!=53);
+}
+
 void controlDeUsuarios(Radio *estacion_de_radio)
 {
     char op;
@@ -129,6 +222,59 @@ void controlDeUsuarios(Radio *estacion_de_radio)
 
 }
 
+void controlDeClientes(Radio *estacion_de_radio)
+{
+    char op;
+    do{
+        system("cls");
+        textcolor(LIGHTBLUE);
+        printf("--CONTROL DE CLIENTES--\n");
+        textcolor(WHITE);
+        printf("[1] Registro de cliente\n");
+        printf("[2] Modificar cliente \n");
+        printf("[3] Mostrar listado de clientes \n");
+        printf("[4] Menu principal \n");
+        printf("[5] Salir del programa \n");
+        textcolor(YELLOW);
+        printf("Ingrese la opcion:");
+        textcolor(WHITE);fflush(stdin); op=getche();
+
+        switch(op){
+            case 49: registroCliente(estacion_de_radio); break;
+            case 50: break;
+            case 51: mostrarListaDeClientes(); break;
+            case 52: menu(estacion_de_radio); break;
+            case 53: salirDelPrograma(estacion_de_radio); exit(1);
+            default : mensajePorDefecto();
+        }
+    }while(op!=53);
+
+}
+
+static void guardarCliente(Locutor *nuevoCliente){
+	FILE *file;
+
+	file=fopen(ARCHIVO_CLIENTES,"ab");
+	if(!file){
+		errorCritico();
+	}else{
+		fwrite(nuevoCliente, sizeof(Cliente), 1,file);
+	}
+	fclose(file);
+}
+
+static void guardarPrograma(Programa *nuevoPrograma){
+	FILE *file;
+
+	file=fopen(ARCHIVO_PROGRAMAS,"ab");
+	if(!file){
+		errorCritico();
+	}else{
+		fwrite(nuevoPrograma, sizeof(Programa), 1,file);
+	}
+	fclose(file);
+}
+
 static void guardarLocutor(Locutor *nuevoLocutor){
 	FILE *file;
 
@@ -151,6 +297,24 @@ static void guardarSecretaria(Secretaria *nuevaSecretaria){
 		fwrite(nuevaSecretaria, sizeof(Secretaria), 1,file);
 	}
 	fclose(file);
+}
+
+static void ingresarClienteALaLista(Radio *estacion_de_radio, Cliente *nuevoCliente){
+    //EL NUEVO NODO LOCUTOR SU SIGUIENTE APUNTARA A NULL PARA LOS ENLACES
+    nuevoCliente->sig=NULL;
+    //SI LA LISTA ESTA VACIA EL NUEVO LOCUTOR SERA EL PRIMER NODO EN LA LISTA
+	if(!estacion_de_radio->lista_de_clientes){
+		estacion_de_radio->lista_de_clientes=nuevoCliente;
+	} // SI LA LISTA YA TIENE ELEMENTOS SE CORRERA HASTA LLEGAR AL FINAL PARA HACER EL ENLACE
+	else{
+		Cliente *listaAuxiliar;
+		listaAuxiliar=estacion_de_radio->lista_de_clientes;
+		while(listaAuxiliar->sig)
+			listaAuxiliar=listaAuxiliar->sig;
+		//SE HACE EL ENLACE CON EL ULTIMO NODO DE LA LISTA
+		listaAuxiliar->sig=nuevoCliente;
+
+	}
 }
 
 static void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor){
@@ -181,6 +345,20 @@ static void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nue
 		while(listaAuxiliar->sig)
 			listaAuxiliar=listaAuxiliar->sig;
 		listaAuxiliar->sig=nuevaSecretaria;
+
+	}
+}
+
+static void ingresarProgramaALaLista(Radio *estacion_de_radio, Programa *nuevoPrograma){
+	if(!estacion_de_radio->lista_de_programas){
+		estacion_de_radio->lista_de_programas=nuevoPrograma;
+	}
+	else{
+		Programa *listaAuxiliar;
+		listaAuxiliar=estacion_de_radio->lista_de_programas;
+		while(listaAuxiliar->sig)
+			listaAuxiliar=listaAuxiliar->sig;
+		listaAuxiliar->sig=nuevoPrograma;
 
 	}
 }
@@ -241,6 +419,173 @@ static int validarSueldo(int sueldo){
         else if(sueldo<0)
             return 0;
     return 1;
+}
+
+void registroCliente(Radio *estacion_de_radio){
+	system("cls");
+
+    Cliente *nuevoCliente;
+    nuevoCliente=(Cliente*)malloc(sizeof(Cliente));
+
+    if(!nuevoCliente){
+    	errorCritico();
+    }
+    else{
+    	FILE * file=fopen(ARCHIVO_CLIENTES,"rb");
+	    int id=0, valido=1;
+	    char cedula[8]="",sueldo[5]="", edad[2]="";
+	    long aux;
+
+	    fseek(file,(sizeof(Cliente)*(-1)),SEEK_END);
+	    if(fread(nuevoCliente,sizeof(Cliente),1,file))
+	    	id=nuevoCliente->id;
+        do{
+            textcolor(LIGHTBLUE);
+            printf("--REGISTRO CLIENTE--\n");
+            textcolor(WHITE);
+            printf("Ingrese el nombre del nuevo Cliente:                                  \n");
+            fflush(stdin);
+            gets(nuevoCliente->persona_cliente.nombre);
+            valido=validarNombre(nuevoCliente->persona_cliente.nombre);
+                if(!valido){
+                    textcolor(RED);
+                    printf("El nombre no puede tener espacios o ser mas largo de 20 letras\n");
+                    Sleep(2000);
+                    system("cls");
+                }
+        }while(!valido);
+
+	     do{
+            textcolor(WHITE);
+            printf("Ingrese el Apellido del nuevo cliente:                                  \n");
+            fflush(stdin);
+            gets(nuevoCliente->persona_cliente.apellido);
+            valido=validarNombre(nuevoCliente->persona_cliente.apellido);
+                if(!valido){
+                    textcolor(RED);
+                    printf("El Apellido no puede tener espacios o ser mas largo de 20 letras\r");
+                    Sleep(2000);
+                }
+        }while(!valido);
+
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese la cedula del cliente                                \n");
+            fflush(stdin);
+            gets(cedula); aux=atoi(&cedula);
+            valido=validarCedula(estacion_de_radio,aux);
+            if(!valido){
+                textcolor(RED);
+                printf("La cedula que ingreso es incorrecta o ya esta registrada \r");
+                Sleep(2000);
+            }else
+                nuevoCliente->persona_cliente.cedula=aux;
+	    }while(!valido);
+
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese la edad del cliente                                \n");
+            fflush(stdin);
+            gets(edad); aux=atoi(&edad);
+            valido=validarEdad(aux);
+            if(!valido){
+                textcolor(RED);
+                printf("La edad valida tiene que estar entre 18 y 80 a%cos \r",164);
+                Sleep(2000);
+            }else
+                nuevoCliente->persona_cliente.edad=aux;
+	    }while(!valido);
+            id++;
+            nuevoCliente->id=id;
+            nuevoCliente->sig=NULL;
+            fclose(file);
+            ingresarClienteALaLista(estacion_de_radio,nuevoCliente);
+            guardarCliente(nuevoCliente);
+    }
+}
+
+void registroPrograma(Radio *estacion_de_radio){
+    system("cls");
+
+    Programa *nuevoPrograma;
+    nuevoPrograma=(Programa*)malloc(sizeof(Programa));
+
+    if(!nuevoPrograma){
+    	errorCritico();
+    }
+    else{
+    	FILE * file=fopen(ARCHIVO_PROGRAMAS,"rb");
+	    int id=0, valido=1;
+	    char inicio[1]="";
+	    long aux;
+
+	    fseek(file,(sizeof(Programa)*(-1)),SEEK_END);
+	    if(fread(nuevoPrograma,sizeof(Programa),1,file))
+	    	id=nuevoPrograma->id;
+        do{
+            textcolor(LIGHTBLUE);
+            printf("--REGISTRO PROGRAMA--\n");
+            textcolor(WHITE);
+            printf("Ingrese el nombre del nuevo programa:                                  \n");
+            fflush(stdin);
+            gets(nuevoPrograma->nombre_de_programa);
+            valido=validarNombre(nuevoPrograma->nombre_de_programa);
+                if(!valido){
+                    textcolor(RED);
+                    printf("El nombre no puede tener espacios o ser mas largo de 20 letras\n");
+                    Sleep(2000);
+                    system("cls");
+                }
+        }while(!valido);
+
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese el horario de inicio                                \n");
+            fflush(stdin);
+            gets(inicio); aux=atoi(&inicio);
+            valido=validarEdad(aux);
+            if(!valido){
+                textcolor(RED);
+                printf("La hora que ingreso es incorrecta  \r");
+                Sleep(2000);
+            }else
+                nuevoPrograma->horario_de_inicio=aux;
+	    }while(!valido);
+
+	    do{
+            textcolor(WHITE);
+            printf("Ingrese la hora de fin del programa                          \n");
+            fflush(stdin);
+            gets(inicio); aux=atoi(&inicio);
+            valido=validarEdad(aux);
+            if(!valido){
+                textcolor(RED);
+                printf("La hora que ingreso es incorrecta\r");
+                Sleep(2000);
+            }else
+                nuevoPrograma->horario_de_fin=aux;
+	    }while(!valido);
+
+	     do{
+            textcolor(WHITE);
+            printf("Ingrese el costo de pauta del programa                        \n");
+            scanf("%i",&nuevoPrograma->coste_de_pauta);
+            if(nuevoPrograma->coste_de_pauta>40000)
+                valido=0;
+            if(!valido){
+                textcolor(RED);
+                printf("El costo tiene que ser menor a 50000\r");
+                Sleep(2000);
+            }
+
+	    }while(!valido);
+            id++;
+            nuevoPrograma->id=id;
+            nuevoPrograma->sig=NULL;
+            fclose(file);
+            ingresarProgramaALaLista(estacion_de_radio,nuevoPrograma);
+            guardarPrograma(nuevoPrograma);
+    }
 }
 
 void registroLocutor(Radio *estacion_de_radio){
@@ -332,8 +677,8 @@ void registroLocutor(Radio *estacion_de_radio){
                 textcolor(RED);
                 printf("El sueldo tiene que estar entre el presupuesto \r");
                 Sleep(2000);
-            }else
-                nuevoLocutor->empleado_locutor.sueldo=aux;
+            }
+                //nuevoLocutor->empleado_locutor.sueldo=aux;
 
 	    }while(!valido);
 
@@ -555,83 +900,82 @@ Secretaria * buscarSecretaria(Radio * estacion_de_radio,Secretaria *secretariaAM
         char op="";
         long aux;
         do{
-        system("cls");
-        textcolor(LIGHTBLUE);
-        printf("--BUSCAR SECRETARIA--\n");
-        textcolor(WHITE);
-        printf("[1] Buscar por ID\n");
-        printf("[2] Buscar por Cedula\n");
-        printf("[3] Buscar por Nombre\n");
-        printf("[4] Cancelar\n");
-        textcolor(YELLOW);
-        printf("Ingrese la opcion: ");
-        textcolor(WHITE);op=getche();
+            system("cls");
+            textcolor(LIGHTBLUE);
+            printf("--BUSCAR SECRETARIA--\n");
+            textcolor(WHITE);
+            printf("[1] Buscar por ID\n");
+            printf("[2] Buscar por Cedula\n");
+            printf("[3] Buscar por Nombre\n");
+            printf("[4] Cancelar\n");
+            textcolor(YELLOW);
+            printf("Ingrese la opcion: ");
+            textcolor(WHITE);op=getche();
 
-        switch(op){
-            case 49: break;
-            case 50: system("cls");
-                    int cedula;
-                    printf("Ingresar Cedula: \n");
-                    scanf("%i",&cedula);
-                    //Para recorrer la lista
-                    secretariaAModificar=estacion_de_radio->lista_de_secretarias;
-                    while(secretariaAModificar){
-                        if(secretariaAModificar->persona_secretaria.cedula==cedula){
-                            return secretariaAModificar;
-                        }
-                        secretariaAModificar=secretariaAModificar->sig;
-                    }
-                    printf("No hay ningun Locutor registrado con esa Cedula\n");
-                    pausar();
-                    return 0;
-                    break;
-
-            case 51: system("cls");
-                    char nombre[30];
-                    printf("Ingresar Nombre: \n");
-                    fflush(stdin);
-                    gets(nombre);
-                    printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
-                    int i=1, encontrado=0;
-                    secretariaAModificar=estacion_de_radio->lista_de_secretarias;
-                    while(secretariaAModificar){
-                        if(strcmpi(secretariaAModificar->persona_secretaria.nombre,nombre)==0){
-                            printf("[%i] %-6s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n",i," ",secretariaAModificar->empleado_secretaria.id,
-                            secretariaAModificar->persona_secretaria.nombre,
-                            secretariaAModificar->persona_secretaria.apellido,
-                            secretariaAModificar->persona_secretaria.cedula,
-                            secretariaAModificar->persona_secretaria.edad,
-                            secretariaAModificar->empleado_secretaria.sueldo,
-                            "Nombre del programa");
-                            i++;
-                            encontrado=1;
+            switch(op){
+                case 49: break;
+                case 50: system("cls");
+                        int cedula;
+                        printf("Ingresar Cedula: \n");
+                        scanf("%i",&cedula);
+                        //Para recorrer la lista
+                        secretariaAModificar=estacion_de_radio->lista_de_secretarias;
+                        while(secretariaAModificar){
+                            if(secretariaAModificar->persona_secretaria.cedula==cedula){
+                                return secretariaAModificar;
                             }
                             secretariaAModificar=secretariaAModificar->sig;
                         }
+                        printf("No hay ningun Locutor registrado con esa Cedula\n");
+                        pausar();
+                        return 0;
+                        break;
 
-                    if(encontrado){
-                        do{
-                            textcolor(YELLOW);
-                            printf("Ingrese la secretaria a elegir: "); fflush(stdin); textcolor(WHITE);op=getche();
-                            aux=atoi(&op);
-                          }while(aux>=i || aux<0);
+                case 51: system("cls");
+                        char nombre[30];
+                        printf("Ingresar Nombre: \n");
+                        fflush(stdin);
+                        gets(nombre);
+                        printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s \n"," ","Id Secretaria","Nombre","Apellido","Cedula","Edad","Sueldo");
+                        int i=1, encontrado=0;
                         secretariaAModificar=estacion_de_radio->lista_de_secretarias;
                         while(secretariaAModificar){
-                            if(strcmpi(secretariaAModificar->persona_secretaria.nombre,nombre)==0)
-                                --aux;
-                            if(aux==0){
-                                pausar();
-                                return secretariaAModificar;
+                            if(strcmpi(secretariaAModificar->persona_secretaria.nombre,nombre)==0){
+                                printf("[%i] %-6s %-20i %-10s %-10s %-10i %-10i %-10i \n",i," ",secretariaAModificar->empleado_secretaria.id,
+                                secretariaAModificar->persona_secretaria.nombre,
+                                secretariaAModificar->persona_secretaria.apellido,
+                                secretariaAModificar->persona_secretaria.cedula,
+                                secretariaAModificar->persona_secretaria.edad,
+                                secretariaAModificar->empleado_secretaria.sueldo);
+                                i++;
+                                encontrado=1;
+                                }
+                                secretariaAModificar=secretariaAModificar->sig;
+                            }
+
+                        if(encontrado){
+                            do{
+                                textcolor(YELLOW);
+                                printf("Ingrese la secretaria a elegir: "); fflush(stdin); textcolor(WHITE);op=getche();
+                                aux=atoi(&op);
+                              }while(aux>=i || aux<0);
+                            secretariaAModificar=estacion_de_radio->lista_de_secretarias;
+                            while(secretariaAModificar){
+                                if(strcmpi(secretariaAModificar->persona_secretaria.nombre,nombre)==0)
+                                    --aux;
+                                if(aux==0){
+                                    pausar();
+                                    return secretariaAModificar;
+                                  }
+                                secretariaAModificar=secretariaAModificar->sig;
                               }
-                            secretariaAModificar=secretariaAModificar->sig;
                           }
-                      }
-                    printf("No hay ninguna Secretaria registrada con ese nombre\n");
-                    pausar();
-                    return 0;
-                    break;
-            default : mensajePorDefecto(); break;
-        }
+                        printf("No hay ninguna Secretaria registrada con ese nombre\n");
+                        pausar();
+                        return 0;
+                        break;
+                default : mensajePorDefecto(); break;
+            }
         }while(op!=3);
 
 }
@@ -679,7 +1023,7 @@ static void modificarRegistroSecretaria(Radio * estacion_de_radio){
                 printf("--OPCIONES--\n");
                 textcolor(WHITE);
                 printf("[1] Modificar sueldo base\n");
-                printf("[2] Despedir Locutor\n");
+                printf("[2] Despedir Secretaria\n");
                 printf("[3] Cancelar\n");
                 textcolor(YELLOW);
                 printf("Ingrese la opcion: ");
@@ -710,7 +1054,7 @@ static void modificarRegistroSecretaria(Radio * estacion_de_radio){
                              errorCritico();
                             }else{
                                 system("cls");
-                                estacion_de_radio->lista_de_secretarias=eliminarLocutor(estacion_de_radio,secretariaAModificar);
+                                estacion_de_radio->lista_de_secretarias=eliminarSecretaria(estacion_de_radio,secretariaAModificar);
                                 Secretaria *aux=estacion_de_radio->lista_de_secretarias;
                                 int id=1;
                                 rewind(file);
@@ -837,6 +1181,28 @@ void registroSecretaria(Radio *estacion_de_radio){
     }
 }
 
+void mostrarListaDeClientes(){
+	system("cls");
+	FILE *file;
+	file=fopen(ARCHIVO_CLIENTES,"rb");
+	Cliente clienteALeer;
+    textcolor(LIGHTBLUE);
+    printf("%-52s CLIENTES\n"," ");
+    textcolor(WHITE);
+	printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s \n"," ","Id Cliente","Nombre","Apellido","Cedula","Edad","Cotizacion");
+	textcolor(DARKGRAY);
+	printf("%-10s-------------------------------------------------------------------------------------------------\n"," ");
+	textcolor(WHITE);
+	while(fread(&clienteALeer, sizeof(Cliente),1, file)){
+	 	printf("%-10s %-20i %-10s %-10s %-10i %-10i \n"," ",clienteALeer.id,
+	    clienteALeer.persona_cliente.nombre,
+	    clienteALeer.persona_cliente.apellido,
+	    clienteALeer.persona_cliente.cedula,
+	    clienteALeer.persona_cliente.edad);
+	}
+	pausar();
+}
+
 void mostrarListaDeLocutores(){
 	system("cls");
 	FILE *file;
@@ -858,9 +1224,7 @@ void mostrarListaDeLocutores(){
 	    locutorALeer.empleado_locutor.sueldo,
 	    "Nombre del programa");
 	}
-	printf("\n");
-	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
-    getch();
+	pausar();
 }
 /*//MOSTRAR LISTA ENLAZADA
 
@@ -894,24 +1258,62 @@ void mostrarListaDeSecretarias(){
     textcolor(LIGHTBLUE);
     printf("%-52s SECRETARIAS\n"," ");
     textcolor(WHITE);
-	printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n"," ","Id Locutor","Nombre","Apellido","Cedula","Edad","Sueldo","Nombre del programa");
+	printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s \n"," ","Id Secretaria","Nombre","Apellido","Cedula","Edad","Sueldo");
 	textcolor(DARKGRAY);
 	printf("%-10s-------------------------------------------------------------------------------------------------\n"," ");
 	textcolor(WHITE);
 	while(fread(&secretariaALeer, sizeof(Locutor),1, file)){
-	 	printf("%-10s %-20i %-10s %-10s %-10i %-10i %-10i %-10s \n"," ",secretariaALeer.empleado_secretaria.id,
+	 	printf("%-10s %-20i %-10s %-10s %-10i %-10i %-10i\n"," ",secretariaALeer.empleado_secretaria.id,
 	    secretariaALeer.persona_secretaria.nombre,
 	    secretariaALeer.persona_secretaria.apellido,
 	    secretariaALeer.persona_secretaria.cedula,
 	    secretariaALeer.persona_secretaria.edad,
-	    secretariaALeer.empleado_secretaria.sueldo,
-	    "Nombre del programa");
+	    secretariaALeer.empleado_secretaria.sueldo);
 	}
-	printf("\n");
-	printf("\t \t \t \t  PRESIONA CUALQUIER TECLA PARA VOLVER...");
-    getch();
+	pausar();
 }
 //ELIMINAR CADA NODO DE LA LISTA
+
+void mostrarListaDeProgramas(){
+	system("cls");
+	FILE *file;
+	file=fopen(ARCHIVO_CLIENTES,"rb");
+	Programa programaALeer;
+    textcolor(LIGHTBLUE);
+    printf("%-52s PROGRAMAS\n"," ");
+    textcolor(WHITE);
+	printf("%-10s %-20s %-10s %-10s %-10s %-10s %-10s \n"," ","Id","Nombre","Inicio","Fin","Locutores","Precio");
+	textcolor(DARKGRAY);
+	printf("%-10s-------------------------------------------------------------------------------------------------\n"," ");
+	textcolor(WHITE);
+	while(fread(&programaALeer, sizeof(Programa),1, file)){
+	 	printf("%-10s %-20i %-10s %-10i %-10i %-10i \n"," ",programaALeer.id,
+	    programaALeer.nombre_de_programa,
+	    programaALeer.horario_de_inicio,
+	    programaALeer.horario_de_fin,
+	    programaALeer.coste_de_pauta);
+	}
+	pausar();
+}
+
+void eliminarListaClientes(Radio *estacion_de_radio){
+    Cliente *listaAuxiliar;
+	while(estacion_de_radio->lista_de_clientes){
+		listaAuxiliar=estacion_de_radio->lista_de_clientes;
+		estacion_de_radio->lista_de_clientes=estacion_de_radio->lista_de_clientes->sig;
+		free(listaAuxiliar);
+	}
+}
+
+void eliminarListaProgramas(Radio *estacion_de_radio){
+    Programa *listaAuxiliar;
+	while(estacion_de_radio->lista_de_programas){
+		listaAuxiliar=estacion_de_radio->lista_de_programas;
+		estacion_de_radio->lista_de_programas=estacion_de_radio->lista_de_programas->sig;
+		free(listaAuxiliar);
+	}
+}
+
 void eliminarListaLocutor(Radio * estacion_de_radio){
 	Locutor *listaAuxiliar;
 	while(estacion_de_radio->lista_de_locutores){
@@ -931,8 +1333,12 @@ void eliminarListaSecretarias(Radio * estacion_de_radio){
 }
 
 static void salirDelPrograma(Radio *estacion_de_radio){
+    eliminarListaClientes(estacion_de_radio);
     eliminarListaLocutor(estacion_de_radio);
     eliminarListaSecretarias(estacion_de_radio);
-    free(estacion_de_radio->lista_de_locutores);
-    free(estacion_de_radio->lista_de_secretarias);
+    eliminarListaProgramas(estacion_de_radio);
+	free(estacion_de_radio->lista_de_locutores);
+	free(estacion_de_radio->lista_de_secretarias);
+	free(estacion_de_radio->lista_de_clientes);
+	free(estacion_de_radio->lista_de_programas);
 }

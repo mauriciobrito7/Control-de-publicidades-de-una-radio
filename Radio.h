@@ -9,6 +9,7 @@
 #define ARCHIVO_LOCUTORES "Registros/Locutores/Locutores.bin"
 #define ARCHIVO_SECRETARIAS "Registros/Secretarias/Secretarias.bin"
 #define ARCHIVO_CLIENTES "Registros/Clientes/Clientes.bin"
+#define ARCHIVO_PROGRAMAS "Registros/Programas/Programas.bin"
 #define MAX_NOMBRE 20
 
 typedef struct persona
@@ -46,17 +47,21 @@ typedef struct secretaria{
 
 typedef struct cliente{
     Persona persona_cliente;
-
+    char nombre_empresa[MAX_NOMBRE];
+    int id;
+    struct cliente *sig;
 }Cliente;
 
 typedef struct programas{
-    char *Nombre_de_programa;
+    char nombre_de_programa[MAX_NOMBRE];
+    int id;
+    Locutor *lista_locutores;
+    Cliente *lista_clientes;
     int horario_de_inicio;
     int horario_de_fin;
     int coste_de_pauta;
     struct programas *sig;
-    Locutor lista_de_locutores_asignados;
-}Programas;
+}Programa;
 
 typedef struct boss{
     Persona persona_boss;
@@ -65,6 +70,8 @@ typedef struct boss{
 typedef struct radio{
     Locutor *lista_de_locutores;
     Secretaria *lista_de_secretarias;
+    Cliente *lista_de_clientes;
+    Programa *lista_de_programas;
     int disponibilidad_de_pautas;
     struct radio *sig;
     Boss dueno;
@@ -76,16 +83,26 @@ void pausar();
 void errorCritico();
 //MENU DE CONTROL DE USUARIO
 void controlDeUsuarios(Radio *estacion_de_radio);
+//MENU DE CONTROL DE CLIENTES
+void controlDeClientes(Radio *estacion_de_radio);
+//MENU DE CONTROL DE PROGRAMAS
+void controlDeProgramas(Radio *estacion_de_radio);
 //INICIAR LAS LISTAS DE LA RADIO
 static void recorrerLista(void * nodo);
 void iniciarListas(Radio *estacion_de_radio);
 void cargarListaLocutores(Radio *estacion_de_radio);
+void cargarListaClientes(Radio *estacion_de_radio);
+void cargarListaSecretarias(Radio *estacion_de_radio);
 //GUARDAR REGISTROS DE LOS ARCHIVOS
+static void guardarCliente(Locutor *nuevoCliente);
 static void guardarLocutor(Locutor *nuevoLocutor);
 static void guardarSecretaria(Secretaria *nuevaSecretaria);
+static void guardarPrograma(Programa *nuevoPrograma);
 //INGRESOS EN LA LISTA
+static void ingresarClienteALaLista(Radio *estacion_de_radio, Cliente *nuevoCliente);
 static void ingresarLocutorALaLista(Radio *estacion_de_radio, Locutor *nuevoLocutor);
 static void ingresarSecretariaALaLista(Radio *estacion_de_radio, Secretaria *nuevaSecretaria);
+static void ingresarProgramaALaLista(Radio *estacion_de_radio, Programa *nuevoPrograma);
 //VALIDACIONES DE LOS REGISTROS
 static int validarNombre(char nombre[]);
 static int validarCedula(Radio *estacion_de_radio, int cedula);
@@ -93,11 +110,15 @@ static int validarEdad(int edad);
 //REGISTROS
 void registroLocutor(Radio *estacion_de_radio);
 void registroSecretaria(Radio *estacion_de_radio);
+void registroCliente(Radio *estacion_de_radio);
+void registroPrograma(Radio *estacion_de_radio);
 //MOSTRAR CONTENIDO
+void mostrarListaDeProgramas();
 void mostrarListaDeLocutores();
+void mostrarListaDeSecretarias();
+void mostrarListaDeClientes();
 //MUESTRA LA LISTA ENLAZADA
 void mostrarListaDeLocutores2(Radio *estacion_de_radio);
-void mostrarListaDeSecretarias();
 //MODIFICACIONES DE REGISTRO
 Locutor * buscarLocutor(Radio * estacion_de_radio,Locutor *locutorAModificar);
 Secretaria * buscarSecretaria(Radio * estacion_de_radio,Secretaria *secretariaAModificar);
@@ -106,8 +127,10 @@ static void modificarRegistroSecretaria(Radio * estacion_de_radio);
 static Locutor * eliminarLocutor(Radio *estacion_de_radio , Locutor *locutorAModificar);
 static Secretaria * eliminarSecretaria(Radio *estacion_de_radio, Secretaria *secretariaAModificar);
 
+void eliminarListaClientes(Radio *estacion_de_radio);
 void eliminarListaLocutor(Radio * estacion_de_radio);
 void eliminarListaSecretarias(Radio * estacion_de_radio);
+void eliminarListaProgramas(Radio *estacion_de_radio);
 static void salirDelPrograma(Radio *estacion_de_radio);
 
 #endif
