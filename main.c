@@ -34,8 +34,9 @@ void menu (Radio *estacion_de_radio){
     printf("[1] Gestion de clientes para la publicidad \n");
     printf("[2] Gestion de usuarios de la radio\n");
     printf("[3] Gestion de planes de las publicidades \n");
-    printf("[4] Listado de clientes \n");
-    printf("[5] Salir \n");
+    printf("[4] Listado de programas \n");
+    printf("[5] Reportes \n");
+    printf("[6] Salir \n");
     textcolor(YELLOW);
     printf("Ingrese la opcion: ");
     textcolor(WHITE);fflush(stdin);op=getche();
@@ -44,8 +45,9 @@ void menu (Radio *estacion_de_radio){
         case 49: controlDeClientes(estacion_de_radio); break;
         case 50: controlDeUsuarios(estacion_de_radio); break;
         case 51: controlDeProgramas(estacion_de_radio); break;
-        case 52: break;
-        case 53:
+        case 52: mostrarListaDeProgramas(); break;
+        case 53: mostrarReportes(estacion_de_radio); break;
+        case 54:
                  eliminarListaClientes(estacion_de_radio);
                  eliminarListaLocutor(estacion_de_radio);
                  eliminarListaSecretarias(estacion_de_radio);

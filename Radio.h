@@ -49,6 +49,7 @@ typedef struct cliente{
     Persona persona_cliente;
     char nombre_empresa[MAX_NOMBRE];
     int id;
+    int cotizacion;
     struct cliente *sig;
 }Cliente;
 
@@ -65,6 +66,8 @@ typedef struct programas{
 
 typedef struct boss{
     Persona persona_boss;
+    int ingresos;
+    int egresos;
 }Boss;
 
 typedef struct radio{
@@ -94,7 +97,7 @@ void cargarListaLocutores(Radio *estacion_de_radio);
 void cargarListaClientes(Radio *estacion_de_radio);
 void cargarListaSecretarias(Radio *estacion_de_radio);
 //GUARDAR REGISTROS DE LOS ARCHIVOS
-static void guardarCliente(Locutor *nuevoCliente);
+static void guardarCliente(Cliente *nuevoCliente);
 static void guardarLocutor(Locutor *nuevoLocutor);
 static void guardarSecretaria(Secretaria *nuevaSecretaria);
 static void guardarPrograma(Programa *nuevoPrograma);
@@ -106,7 +109,7 @@ static void ingresarProgramaALaLista(Radio *estacion_de_radio, Programa *nuevoPr
 //VALIDACIONES DE LOS REGISTROS
 static int validarNombre(char nombre[]);
 static int validarCedula(Radio *estacion_de_radio, int cedula);
-static int validarEdad(int edad);
+static int validarNombreDelPrograma(char nombre[]);
 //REGISTROS
 void registroLocutor(Radio *estacion_de_radio);
 void registroSecretaria(Radio *estacion_de_radio);
@@ -117,13 +120,16 @@ void mostrarListaDeProgramas();
 void mostrarListaDeLocutores();
 void mostrarListaDeSecretarias();
 void mostrarListaDeClientes();
+void mostrarReportes(Radio * estacion_de_radio);
 //MUESTRA LA LISTA ENLAZADA
 void mostrarListaDeLocutores2(Radio *estacion_de_radio);
 //MODIFICACIONES DE REGISTRO
 Locutor * buscarLocutor(Radio * estacion_de_radio,Locutor *locutorAModificar);
 Secretaria * buscarSecretaria(Radio * estacion_de_radio,Secretaria *secretariaAModificar);
+Programa * seleccionarPrograma(Radio * estacion_de_radio,Programa *programaAModificar);
 static void modificarRegistroLocutor(Radio * estacion_de_radio);
 static void modificarRegistroSecretaria(Radio * estacion_de_radio);
+static void modificarRegistroPrograma(Radio * estacion_de_radio);
 static Locutor * eliminarLocutor(Radio *estacion_de_radio , Locutor *locutorAModificar);
 static Secretaria * eliminarSecretaria(Radio *estacion_de_radio, Secretaria *secretariaAModificar);
 
