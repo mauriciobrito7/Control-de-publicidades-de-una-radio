@@ -10,6 +10,7 @@
 #define ARCHIVO_SECRETARIAS "Registros/Secretarias/Secretarias.bin"
 #define ARCHIVO_CLIENTES "Registros/Clientes/Clientes.bin"
 #define ARCHIVO_PROGRAMAS "Registros/Programas/Programas.bin"
+#define ARCHIVO_LOCUTORES_EN_PROGRAMAS "Registros/Programas/Locutores_Asignados.bin"
 #define MAX_NOMBRE 20
 
 typedef struct persona
@@ -39,10 +40,6 @@ typedef struct secretaria{
     Empleado empleado_secretaria;
     char password[12];
     struct secretaria *sig;
-    //Agregar_registro_de_locutor;
-    //Agregar_registro_de_cliente;
-    //Eliminar_registro_de_locutor;
-    //Eliminar_registro_de_cliente;
 }Secretaria;
 
 typedef struct cliente{
@@ -65,7 +62,7 @@ typedef struct programas{
 }Programa;
 
 typedef struct boss{
-    Persona persona_boss;
+    //Persona persona_boss;
     int ingresos;
     int egresos;
 }Boss;
@@ -116,7 +113,8 @@ void registroSecretaria(Radio *estacion_de_radio);
 void registroCliente(Radio *estacion_de_radio);
 void registroPrograma(Radio *estacion_de_radio);
 //MOSTRAR CONTENIDO
-void mostrarListaDeProgramas();
+void mostrarListaDeProgramas(Radio * estacion_de_radio);
+void mostrarOpcionesDeProgramas(Radio * estacion_de_radio);
 void mostrarListaDeLocutores();
 void mostrarListaDeSecretarias();
 void mostrarListaDeClientes();

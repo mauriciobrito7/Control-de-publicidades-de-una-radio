@@ -17,6 +17,8 @@ int main ()
 	cargarListaProgramas(&mi_estacion_de_radio);
 	cargarListaLocutores(&mi_estacion_de_radio);
 	cargarListaSecretarias(&mi_estacion_de_radio);
+
+	mi_estacion_de_radio.lista_de_programas->lista_locutores=NULL;
 	//MENU PRINCIPAL
 	menu(&mi_estacion_de_radio);
 	return 0;
@@ -34,7 +36,7 @@ void menu (Radio *estacion_de_radio){
     printf("[1] Gestion de clientes para la publicidad \n");
     printf("[2] Gestion de usuarios de la radio\n");
     printf("[3] Gestion de planes de las publicidades \n");
-    printf("[4] Listado de programas \n");
+    printf("[4] Listado de publicidades \n");
     printf("[5] Reportes \n");
     printf("[6] Salir \n");
     textcolor(YELLOW);
@@ -45,7 +47,7 @@ void menu (Radio *estacion_de_radio){
         case 49: controlDeClientes(estacion_de_radio); break;
         case 50: controlDeUsuarios(estacion_de_radio); break;
         case 51: controlDeProgramas(estacion_de_radio); break;
-        case 52: mostrarListaDeProgramas(); break;
+        case 52: mostrarListaDeProgramas(estacion_de_radio); break;
         case 53: mostrarReportes(estacion_de_radio); break;
         case 54:
                  eliminarListaClientes(estacion_de_radio);
@@ -59,6 +61,6 @@ void menu (Radio *estacion_de_radio){
         		 exit(1);
         default : mensajePorDefecto();
     }
-    }while(op!=53);
+    }while(op!=54);
 }
 
